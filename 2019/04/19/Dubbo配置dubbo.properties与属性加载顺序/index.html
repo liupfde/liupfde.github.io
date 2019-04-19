@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Dubbo配置:dubbo.properties与属性加载顺序 | liupf&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Dubbo配置:dubbo.properties与属性加载顺序#### 优先级(递减)  Java  虚拟节参数设置: -Ddubbo.protocol.port = 20880     XML  通过Spring或者SpringBoot加载xml文件     Properties  全局的配置 dubbo.properties dubbo.protrocal.port = 20880     常">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo配置:dubbo.properties与属性加载顺序">
+<meta property="og:url" content="http://yoursite.com/2019/04/19/Dubbo配置dubbo.properties与属性加载顺序/index.html">
+<meta property="og:site_name" content="liupf&#39;s blog">
+<meta property="og:description" content="Dubbo配置:dubbo.properties与属性加载顺序#### 优先级(递减)  Java  虚拟节参数设置: -Ddubbo.protocol.port = 20880     XML  通过Spring或者SpringBoot加载xml文件     Properties  全局的配置 dubbo.properties dubbo.protrocal.port = 20880     常">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-19T03:48:50.190Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dubbo配置:dubbo.properties与属性加载顺序">
+<meta name="twitter:description" content="Dubbo配置:dubbo.properties与属性加载顺序#### 优先级(递减)  Java  虚拟节参数设置: -Ddubbo.protocol.port = 20880     XML  通过Spring或者SpringBoot加载xml文件     Properties  全局的配置 dubbo.properties dubbo.protrocal.port = 20880     常">
+  
+    <link rel="alternate" href="/atom.xml" title="liupf&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">liupf&#39;s blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Dubbo配置dubbo.properties与属性加载顺序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/19/Dubbo配置dubbo.properties与属性加载顺序/" class="article-date">
+  <time datetime="2019-04-19T02:15:28.000Z" itemprop="datePublished">2019-04-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Dubbo配置:dubbo.properties与属性加载顺序
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Dubbo配置-dubbo-properties与属性加载顺序"><a href="#Dubbo配置-dubbo-properties与属性加载顺序" class="headerlink" title="Dubbo配置:dubbo.properties与属性加载顺序"></a>Dubbo配置:dubbo.properties与属性加载顺序</h3><pre><code>#### 优先级(递减)
+</code></pre><ol>
+<li><p>Java</p>
+<ul>
+<li>虚拟节参数设置: -Ddubbo.protocol.port = 20880</li>
+</ul>
+</li>
+</ol>
+<ol start="2">
+<li><p>XML</p>
+<ul>
+<li><p>通过Spring或者SpringBoot加载xml文件</p>
+<dubbo :protrocal port="30880">
+</dubbo></li>
+</ul>
+</li>
+<li><p>Properties</p>
+<ul>
+<li><p>全局的配置 dubbo.properties</p>
+<p>dubbo.protrocal.port = 20880</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="常用配置"><a href="#常用配置" class="headerlink" title="常用配置"></a>常用配置</h4><ul>
+<li><p><strong>check=””</strong> 启动时是否检查 默认开启  </p>
+<p>例如 若服务提供者未启动 而服务消费者先启动了服务 若<strong>check=“true”</strong> 则报错阻止Spring启动 否则不报错</p>
+</li>
+<li><p><strong>timeout=””</strong> 超时属性 单位毫秒</p>
+<p>超过多长时间就不等待了 防止大量线程阻塞(还可以指定方法超时)</p>
+<ul>
+<li>方法级优先 接口级次之 全局配置再次之</li>
+<li>如果级别一样则消费方优先于提供方</li>
+</ul>
+</li>
+<li><p><strong>retries=””</strong> 调用失败后重试次数</p>
+</li>
+<li><strong>version=””</strong> 声明版本号 进行灰度发布</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/19/Dubbo配置dubbo.properties与属性加载顺序/" data-id="cjunfzmm50001cougmpwu0u4z" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/19/ASCII、Unicode、UTF-8之间的区别和联系/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">ASCII、Unicode、UTF-8之间的区别和联系</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/19/Dubbo配置dubbo.properties与属性加载顺序/">Dubbo配置:dubbo.properties与属性加载顺序</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/19/ASCII、Unicode、UTF-8之间的区别和联系/">ASCII、Unicode、UTF-8之间的区别和联系</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/18/b-树的基本原理/">b+树的基本原理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 liupf<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
