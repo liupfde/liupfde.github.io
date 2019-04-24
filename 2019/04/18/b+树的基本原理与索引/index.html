@@ -10,20 +10,20 @@
   <meta name="description" content="为了描述B-Tree，首先定义一条数据记录为一个二元组[key, data]，key为记录的键值，对于不同的数据记录key是互不相同的；data为数据记录除key以外的数据。则B-Tree是满足下列条件的数据结构:  d为大于1的一个正整数，称为B-Tree的度。 h为一个正整数，称为B-Tree的高度 每个非叶子结点有n-1个key和n个指针组成，其中d&amp;lt;=n&amp;lt;=2d。 每个叶子结点">
 <meta property="og:type" content="article">
 <meta property="og:title" content="b+树的基本原理与索引">
-<meta property="og:url" content="http://yoursite.com/2019/04/18/b-树的基本原理与索引/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/04/18/b+树的基本原理与索引/index.html">
 <meta property="og:site_name" content="liupf&#39;s blog">
 <meta property="og:description" content="为了描述B-Tree，首先定义一条数据记录为一个二元组[key, data]，key为记录的键值，对于不同的数据记录key是互不相同的；data为数据记录除key以外的数据。则B-Tree是满足下列条件的数据结构:  d为大于1的一个正整数，称为B-Tree的度。 h为一个正整数，称为B-Tree的高度 每个非叶子结点有n-1个key和n个指针组成，其中d&amp;lt;=n&amp;lt;=2d。 每个叶子结点">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1g27xvzv1hjj30cq037mx4.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g27y9wpnryj30f305b74c.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g27yri43rij30f305bmx8.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g27zwau1jdj30ig0eujs1.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g2802tvo2ej30f306pjrj.jpg">
-<meta property="og:updated_time" content="2019-04-19T08:05:58.200Z">
+<meta property="og:image" content="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27xvzv1hjj30cq037mx4.jpg">
+<meta property="og:image" content="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27y9wpnryj30f305b74c.jpg">
+<meta property="og:image" content="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27yri43rij30f305bmx8.jpg">
+<meta property="og:image" content="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27zwau1jdj30ig0eujs1.jpg">
+<meta property="og:image" content="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g2802tvo2ej30f306pjrj.jpg">
+<meta property="og:updated_time" content="2019-04-24T08:27:47.356Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="b+树的基本原理与索引">
 <meta name="twitter:description" content="为了描述B-Tree，首先定义一条数据记录为一个二元组[key, data]，key为记录的键值，对于不同的数据记录key是互不相同的；data为数据记录除key以外的数据。则B-Tree是满足下列条件的数据结构:  d为大于1的一个正整数，称为B-Tree的度。 h为一个正整数，称为B-Tree的高度 每个非叶子结点有n-1个key和n个指针组成，其中d&amp;lt;=n&amp;lt;=2d。 每个叶子结点">
-<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1g27xvzv1hjj30cq037mx4.jpg">
+<meta name="twitter:image" content="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27xvzv1hjj30cq037mx4.jpg">
   
     <link rel="alternate" href="/atom.xml" title="liupf&#39;s blog" type="application/atom+xml">
   
@@ -70,9 +70,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-b-树的基本原理与索引" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-b+树的基本原理与索引" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/04/18/b-树的基本原理与索引/" class="article-date">
+    <a href="/2019/04/18/b+树的基本原理与索引/" class="article-date">
   <time datetime="2019-04-18T13:27:56.000Z" itemprop="datePublished">2019-04-18</time>
 </a>
     
@@ -103,7 +103,7 @@
 <li>如果某个指针在节点node最右边且不为null，则其指向节点的所有key大于v(keym)，其中v(keym)为node的最后一个key的值。</li>
 <li>如果某个指针在节点node耳朵左右相邻key分别是key(i)和key(i+1)且不为null，则其指向节点的所有key:v(key(i)) &lt; k &lt;v(key(i+1)) 下图是一个d=2的B-Tree示意图</li>
 </ul>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1g27xvzv1hjj30cq037mx4.jpg" alt="image281"></p>
+<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27xvzv1hjj30cq037mx4.jpg" alt="image281"></p>
 <ul>
 <li><p>一个节点由以下三部分组成</p>
 <ul>
@@ -126,14 +126,14 @@
 </li>
 <li><p>内节点不存储data，只存储key；叶子节点不存储指针。</p>
 <p>下图是一个B+Tree的示意图</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g27y9wpnryj30f305b74c.jpg" alt="image4"></p>
+<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27y9wpnryj30f305b74c.jpg" alt="image4"></p>
 <ol start="3">
 <li>由于并不是所有节点都具有相同的域，因此B+Tree中叶节点和内节点一般大小不同。这点与B-Tree不同，虽然B-Tree中不同节点存放的key和指针可能数量不一致，但是每个节点的域和上限是一致的，所以在实现中B-Tree往往对每个节点申请同等大小的空间。</li>
 </ol>
 </li>
 </ol>
 <p>带有顺序访问指针的B+Tree</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g27yri43rij30f305bmx8.jpg" alt="image381"></p>
+<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27yri43rij30f305bmx8.jpg" alt="image381"></p>
 <p>在B+Tree的每个叶子节点增加一个指向相邻叶子节点的指针，就形成了带有顺序访问指针的B+Tree。做这个优化的目的是为了提高区间访问的性能，例如上图如果要查询key为从18到49的所有数据记录，当找到18后，只需顺着节点和指针顺序遍历就可以一次性访问到所有数据节点，极大提到了区间查询效率。</p>
 <hr>
 <p><strong>B树与索引</strong></p>
@@ -143,13 +143,13 @@
 <ul>
 <li><p>MyISAM引擎</p>
 <p>MyISAM采用非聚簇索引的形式，即叶结点的data域存放的是数据记录的地址。<strong>MyISAM的索引文件仅仅保存数据记录的地址。</strong></p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g27zwau1jdj30ig0eujs1.jpg" alt="image11111">在MyISAM中，主索引和辅助索引在结构上没有区别，只是主索引要求key是唯一的。</p>
+<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27zwau1jdj30ig0eujs1.jpg" alt="image11111">在MyISAM中，主索引和辅助索引在结构上没有区别，只是主索引要求key是唯一的。</p>
 </li>
 </ul>
 <ul>
 <li><p>InnoDB引擎</p>
 <p>InnoDB采用聚簇索引的形式，即InnoDB的数据文件本身就是索引文件。对于主键索引来说，其中key是索引，data域存放的就是数据。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g2802tvo2ej30f306pjrj.jpg" alt="image111"></p>
+<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g2802tvo2ej30f306pjrj.jpg" alt="image111"></p>
 <p>对于辅助索引来说，key是辅助索引，而data域存放的是主键，最终会通过主键查找出具体的数据。</p>
 </li>
 </ul>
@@ -157,7 +157,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/18/b-树的基本原理与索引/" data-id="cjuuqfwvd000360ugdorq2ydb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/18/b+树的基本原理与索引/" data-id="cjuuyi68z00027qugaclgepdc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -226,7 +226,7 @@
           </li>
         
           <li>
-            <a href="/2019/04/18/b-树的基本原理与索引/">b+树的基本原理与索引</a>
+            <a href="/2019/04/18/b+树的基本原理与索引/">b+树的基本原理与索引</a>
           </li>
         
       </ul>
