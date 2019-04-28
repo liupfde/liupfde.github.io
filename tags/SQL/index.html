@@ -79,17 +79,13 @@
 
 
 
-<meta name="description" content="###问题 : MySQL多表联查效率高还是多次单表查询效率高? 在业务中碰到一个情景，需要结合两张不同的表中查出数据。例如首先要从A表中判断要查的数据id有没有，如果存在则再从B表中查处具体的数据。这时就可以采用问题中所描述的两种方案。 回答: ​    使用多次单表查询。原因如下:   不利于写操作。有的操作执行读数据时，会锁住被读的数据，阻塞其他业务对该部分的更新操作。如果采用JOIN涉及多">
-<meta property="og:type" content="article">
-<meta property="og:title" content="记一次JOIN的使用">
-<meta property="og:url" content="http://yoursite.com/2019/04/21/记一次JOIN的使用/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="liupf&#39;s blog">
+<meta property="og:url" content="http://yoursite.com/tags/SQL/index.html">
 <meta property="og:site_name" content="liupf&#39;s blog">
-<meta property="og:description" content="###问题 : MySQL多表联查效率高还是多次单表查询效率高? 在业务中碰到一个情景，需要结合两张不同的表中查出数据。例如首先要从A表中判断要查的数据id有没有，如果存在则再从B表中查处具体的数据。这时就可以采用问题中所描述的两种方案。 回答: ​    使用多次单表查询。原因如下:   不利于写操作。有的操作执行读数据时，会锁住被读的数据，阻塞其他业务对该部分的更新操作。如果采用JOIN涉及多">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-24T04:08:06.190Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="记一次JOIN的使用">
-<meta name="twitter:description" content="###问题 : MySQL多表联查效率高还是多次单表查询效率高? 在业务中碰到一个情景，需要结合两张不同的表中查出数据。例如首先要从A表中判断要查的数据id有没有，如果存在则再从B表中查处具体的数据。这时就可以采用问题中所描述的两种方案。 回答: ​    使用多次单表查询。原因如下:   不利于写操作。有的操作执行读数据时，会锁住被读的数据，阻塞其他业务对该部分的更新操作。如果采用JOIN涉及多">
+<meta name="twitter:title" content="liupf&#39;s blog">
 
 
 
@@ -119,13 +115,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/21/记一次JOIN的使用/">
+  <link rel="canonical" href="http://yoursite.com/tags/SQL/">
 
 
 
 
 
-  <title>记一次JOIN的使用 | liupf's blog</title>
+  <title>标签: SQL | liupf's blog</title>
   
 
 
@@ -144,7 +140,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -238,155 +234,52 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block tag">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>SQL<small>标签</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/21/记一次JOIN的使用/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="liupf">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="liupf's blog">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
-        
-          <h1 class="post-title" itemprop="name headline">记一次JOIN的使用</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+            <a class="post-title-link" href="/2019/04/21/SQL优化总结/" itemprop="url">
               
-                <span class="post-meta-item-text">发表于</span>
+                <span itemprop="name">SQL优化总结</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-21T13:53:35+08:00">
-                2019-04-21
-              </time>
-            
+            </a>
+        
+      </h2>
 
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2019-04-21T13:53:35+08:00" content="2019-04-21">
+          04-21
+        </time>
+      </div>
 
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>###问题 : MySQL多表联查效率高还是多次单表查询效率高?</p>
-<p>在业务中碰到一个情景，需要结合两张不同的表中查出数据。例如首先要从A表中判断要查的数据id有没有，如果存在则再从B表中查处具体的数据。这时就可以采用问题中所描述的两种方案。</p>
-<p><strong>回答:</strong></p>
-<p>​    使用多次单表查询。原因如下: </p>
-<ol>
-<li><p>不利于写操作。有的操作执行读数据时，会锁住被读的数据，阻塞其他业务对该部分的更新操作。如果采用JOIN涉及多个聚合函数，则相当于同时锁住了多张表，不能进行读写，影响了系统的整体性能。</p>
-<p>(注:有可能会碰到第一步查询时数据量过大的情况，这时或许可以对第一步进行分页查询，然后第二步中从第一步的结果中再去查。)</p>
-</li>
-<li><p>不利于维护。如果业务发生变动，某一张表的字段改了，那么该SQL语句也会失效。即耦合度太高。</p>
-</li>
-</ol>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/04/19/ASCII、Unicode、UTF-8之间的区别和联系/" rel="next" title="ASCII、Unicode、UTF-8之间的区别和联系">
-                <i class="fa fa-chevron-left"></i> ASCII、Unicode、UTF-8之间的区别和联系
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/21/深入理解ThreadPoolExecutor/" rel="prev" title="深入理解ThreadPoolExecutor">
-                深入理解ThreadPoolExecutor <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  
 
 
           </div>
@@ -394,10 +287,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -456,7 +345,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -612,10 +501,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
