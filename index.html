@@ -249,6 +249,216 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/06/Java-I-O/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="liupf">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="liupf's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/06/Java-I-O/" itemprop="url">Java I/O</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-06T11:00:39+08:00">
+                2019-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="一、UNIX中的I-O"><a href="#一、UNIX中的I-O" class="headerlink" title="一、UNIX中的I/O"></a>一、UNIX中的I/O</h3><h4 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h4><p><strong>UNIX系统将所有的外部设备都看作文件</strong>，所有打开的文件都通过文件描述符来引用。UNIX的输入输出遵循<strong>Open-Read-Write-Close</strong>这套规范。当一个用户进程进行I/O操作之前，他需要调用<strong>(1)</strong>Open来指定并获取操作文件或设备读取或写入的权限。一旦I/O操作对象被打开，那么这个用户进程就可以对该对象进行一次或多次的读、写操作。<strong>(2)</strong>Read操作从I/O操作设备读取数据，并将数据传递给用户。<strong>(2)</strong>Write操作将用户进程中的数据传写入到I/O操作对象。当所有的R/W操作结束后，用户进程<strong>(3)</strong>调用Close来关闭Open打开的文件。这些操作都是通过<strong>文件描述符</strong>操作。文件描述符是一个非负整数，它指向内核中的一个结构体。当打开一个现有文件或者创建一个新的文件夹时，内核向进程返回一个文件描述符。socket读写的文件描述符为<strong>socketfd</strong>。</p>
+<h4 id="I-O模型的分类"><a href="#I-O模型的分类" class="headerlink" title="I/O模型的分类"></a>I/O模型的分类</h4><p>在UNIX系统中，I/O操作通常包含以下两个不同的阶段:</p>
+<ul>
+<li><strong>数据准备</strong></li>
+<li><strong>从内核向进程复制数据</strong></li>
+</ul>
+<p>例如对于套接字的输入，第一步是等待数据从网络中到达，当所有的等待数据到达时，数据被复制到内核中的缓冲区。第二步把数据从内核缓冲区复制到应用进程的缓冲区。根据在这两个不同阶段处理的不同，可以将I/O模型划分为五种类型:</p>
+<ol>
+<li><p><strong>阻塞式I/O模型</strong></p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/20160609135646100_meitu_1.jpg" alt></p>
+<p>应用进程调用recvfrom函数，然后切换到内核空间中运行，直到数据包到达且被复制到应用进程缓冲区中才返回。<strong>进程从调用recvfrom函数到函数返回的整段时间内是被阻塞的。</strong>recvfrom函数成功返回后，进程才接着往下执行处理数据。</p>
+</li>
+<li><p><strong>非阻塞式I/O模型</strong></p>
+<p>等待I/O数据的<strong>第一阶段</strong>，进程并不阻塞，如果recvfrom函数没有马上执行完，则立即返回一个错误。</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/20160609135720523_meitu_1.jpg" alt></p>
+<p>如果调用recvfrom函数后内核没有立即返回数据，则应用进程采用<strong><em>轮询</em></strong>的方式不断的执行函数。</p>
+</li>
+<li><p><strong>I/O复用模型</strong></p>
+<p>select()、poll()函数都使用了I/O复用模型。</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/20160609135743772_meitu_2.jpg" alt></p>
+<p>当调用select()函数时，进程将会被阻塞，等待数据报准备好，返回可读提示。当等待的多个套接字中的一个或者多个变的可用时，进程调用recvfrom()函数，把数据报从内核缓冲区复制到应用进程缓冲区。这个过程中<strong>第一阶段的时候是可以接受多个请求的，即调用多次select()函数，而第二阶段数据复制到应用缓冲区的过程是阻塞的。</strong>这种模型的优势就在于在第一阶段可以<strong>同时</strong>等待多个套接字描述符就绪。</p>
+</li>
+<li><p><strong>信号驱动式I/O模型</strong></p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/20160609135826601_meitu_3.jpg" alt></p>
+<p>这种模型据说应用的比较少。</p>
+<blockquote>
+<p>使用这种模型需要开启套接字的信号驱动I/O功能，并通过sigaction系统调用安装一个信号处理函数。sigaction函数立即返回，我们的进程继续工作，即进程没有被阻塞。当数据报准备好时，内核会为该进程产生一个SIGIO信号，这样我们可以在信号处理函数中调用recvfrom读取数据报，也可以在主循环中读取数据报。无论如何处理SIGIO信号，这种模型的优势在于等待数据报到达期间不被阻塞。</p>
+</blockquote>
+</li>
+<li><p><strong>异步I/O模型</strong></p>
+<p>异步I/O的工作机制是让整个第一阶段和第二阶段的操作都交给内核来完成，等操作完成后再通知进程。</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/20160609135848507_meitu_4.jpg" alt></p>
+<p>与信号驱动式I/O模型不同的地方就是，异步I/O模型整个过程都是交给内核完成，自己只是等待aio_read()函数发送完成信号。信号驱动式I/O模型在第一阶段会返回信号，根据信号再调用recvfrom()函数，第二阶段是阻塞的。</p>
+</li>
+</ol>
+<p>注: recvfrom()函数是UDP套接字中的函数，类似于标准的read()函数。它的作用是从指定的套接字中读取数据报，它会从应用进程切换到内核，并在执行一段时间后返回到应用进程。</p>
+<p>总结：以上五种I/O模型中，前四种在第二阶段都会调用recvfrom()函数阻塞进程，只有<strong>异步I/O模型</strong>在整个过程中都是交给内核完成，没有阻塞。</p>
+<h4 id="同步I-O和异步I-O的区别"><a href="#同步I-O和异步I-O的区别" class="headerlink" title="同步I/O和异步I/O的区别"></a>同步I/O和异步I/O的区别</h4><ul>
+<li>同步I/O：导致请求进程阻塞直到I/O操作完成</li>
+<li>异步I/O：不导致请求进程阻塞</li>
+</ul>
+<h3 id="装饰器模式与Java-I-O"><a href="#装饰器模式与Java-I-O" class="headerlink" title="装饰器模式与Java I/O"></a>装饰器模式与Java I/O</h3><p>装饰器模式的做用就是在不修改原有接口的情况下给原接口增加新的功能。</p>
+<p>以下是一个简单的装饰器模式:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> :liupf</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span> :声音放大器  在不修改Person原有功能的情况下 给Person的say()方法增加功能。</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> :2019/05/10 23:59</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SoundIntensifier</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Person person = <span class="keyword">new</span> Person();</span><br><span class="line">        person.setVoice(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        Amplifier amplifier = <span class="keyword">new</span> Amplifier(person);</span><br><span class="line">        amplifier.say();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Say</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">say</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Say</span></span>&#123;</span><br><span class="line">    <span class="comment">/** 声音分贝*/</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> voice;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVoice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> voice;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVoice</span><span class="params">(<span class="keyword">int</span> voice)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.voice = voice;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="keyword">this</span>.voice);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Amplifier</span> <span class="keyword">implements</span> <span class="title">Say</span></span>&#123;</span><br><span class="line">    Person person;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Amplifier</span><span class="params">(Person person)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.person = person;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(person.getVoice() * <span class="number">10</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体的装饰器模式有四个组成部分，上边只是简要的代码没有完全体现出。四部分为以下几点:</p>
+<ul>
+<li><strong>抽象组件:</strong> 需要被装饰的抽象对象，通常是接口</li>
+<li><strong>具体组件:</strong> 抽象组件的实现，在上文中是<strong>Person类</strong></li>
+<li><strong>抽象装饰者:</strong> 包含了对抽象组件的引用以及抽象组件需要装饰的方法，<strong>需要实现抽象组件接口</strong></li>
+<li><strong>具体装饰者:</strong> 抽象装饰者的具体实现，在上文中是<strong>Amplifier类</strong></li>
+</ul>
+<p>在Java的I/O包下:</p>
+<ul>
+<li>抽象组件: InputStream、OutputStream等</li>
+<li>具体组件: FileInputStream、FileOutputStream等(节点流)</li>
+<li>抽象装饰者: FilerInputStream等</li>
+<li>具体装饰者: BufferInputStream等(处理流，对节点流功能的增强)</li>
+</ul>
+<h3 id="Java-I-O"><a href="#Java-I-O" class="headerlink" title="Java I/O"></a>Java I/O</h3><p><strong>Java中的I/O传输的数据全部都是以流的方式保存，而所有流的本质实际上都是字节。</strong></p>
+<h4 id="I-O流类图"><a href="#I-O流类图" class="headerlink" title="I/O流类图"></a>I/O流类图</h4><p>​    (图源网络侵删)</p>
+<ul>
+<li><p><strong>I/O流</strong></p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/1345308068_2461.jpg" alt></p>
+</li>
+<li><p><strong>字节流</strong></p>
+<p>字节流处理的单元为一个字节。操作的对象是字节、字节数组。</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/20160526175652807_meitu_1.jpg" alt></p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/20160526175652807_meitu_1.jpg" alt></p>
+</li>
+<li><p><strong>字符流(一个字符两个字节)</strong></p>
+<p>字符流处理的单元为两个字节的Unicode字符。操作的对象是字符、字符数组、字符串。</p>
+<ul>
+<li><strong>输出流(Writer):</strong> 他将要写入文件到的字符序列按照编码的方式(如UTF-8、GBK等)转换为字节序列写入文件。</li>
+<li><strong>输入流(Reader):</strong> 他将从文件中读取的字节序列按照指定编码格式转换成字符输出到内存中。</li>
+</ul>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/20160526175730259_meitu_3.jpg" alt></p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/IO/20160526175716649_meitu_4.jpg" alt></p>
+</li>
+</ul>
+<h4 id="区别与联系"><a href="#区别与联系" class="headerlink" title="区别与联系"></a>区别与联系</h4><p>这一小节写的很乱 有些地方没有彻底理解 先写下 待考证。</p>
+<hr>
+<ul>
+<li><p>当系统给你的文件是字节流，但是文件确实全文本时 就可以通过InputStreamReader来进行指定字符集的转换</p>
+</li>
+<li><p>而OutputStream是将字符流按照指定的字符集进行<strong>编码</strong> 输出为字节流。</p>
+</li>
+</ul>
+<p>实际上在计算机底层处理的全部是字节。对字符流的处理实际上是根据编码规则比如UTF-8或者Unicode等字符集翻译成字节。这两者之间的转化在Java中是通过<strong>InputStreamReader</strong>，<strong>OutputStreamWriter</strong>来完成的。<u>InputStreamReader将输入的字节流变为字符流。OutputStreamWriter将输出的字节流转为字符流</u>。</p>
+<p><strong>字节流可以读字符，但是字符流不可以读字节。原因：字节流读取数据的时候读到的全是文件数据的字节形式 等到写入到文件时也是字节，这个过程中没有进行字符集解码。但是字符流读取字节数据的时候会根据字符流的指定字符集进行解码，写入到另一个文件时其实是乱码的字符。</strong></p>
+<p>但是使用字节流读取字符文本时存在另一个问题:如果每次读到的字节数不是字符文本中字符的字节数，那么读出来的数据就可能是乱码。所以要使用字符流。</p>
+<p><strong>字节数组流不需要释放(ByteArrayInput/OutputStream)。</strong>常规操作文件的流如InputStream、OutputStream操作文件时，都是在硬盘上进行修改。这时就需要用到操作系统来代理操作。结束后要通知操作系统关闭。而操作字节数组时，是在内存上进行操作，这时完全由Java虚拟机来掌握。不需要显示的关闭I/O流。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/21/深入理解ThreadPoolExecutor/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -877,7 +1087,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/Dubbo配置dubbo.properties与属性加载顺序/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/Dubbo入门/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liupf">
@@ -896,7 +1106,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/19/Dubbo配置dubbo.properties与属性加载顺序/" itemprop="url">Dubbo配置:dubbo.properties与属性加载顺序</a></h1>
+                <a class="post-title-link" href="/2019/04/19/Dubbo入门/" itemprop="url">Dubbo入门</a></h1>
         
 
         <div class="post-meta">
@@ -984,8 +1194,55 @@
 </li>
 <li><p><strong>retries=””</strong> 调用失败后重试次数</p>
 </li>
-<li><strong>version=””</strong> 声明版本号 进行灰度发布</li>
+<li><p><strong>version=””</strong> 声明版本号 进行灰度发布</p>
+</li>
 </ul>
+<h3 id="Dubbo的负载均衡机制"><a href="#Dubbo的负载均衡机制" class="headerlink" title="Dubbo的负载均衡机制"></a>Dubbo的负载均衡机制</h3><ol>
+<li><p><strong>Random LoadBalance</strong>(基于权重的<strong><em>随机</em></strong>负载均衡机制)</p>
+<p>大量请求的情况下，请求基本上按照服务器配置的权重分散。</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%885.50.26.png" alt></p>
+</li>
+<li><p><strong>RoundRobin LoadBalance</strong>(基于权重的<strong><em>轮询</em></strong>负载均衡机制)</p>
+<p>常规的<strong>轮询</strong>负载均衡机制就是挨个遍历</p>
+<p>而基于<strong>权重</strong>的轮询，当请求过来之后会先看当前服务器轮询的次数是否已经达到了它在整个服务器集群所占的权重，如果达到了，就去请求别的服务器。</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%885.55.44.png" alt></p>
+</li>
+<li><p><strong>LeastActive LoadBalance</strong>(最少活跃数-负载均衡机制)</p>
+<p>根据上次的调用时间找到最快响应的服务器</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%887.48.27.png" alt></p>
+</li>
+<li><p><strong>ConsistentHash LoadBalance</strong>(一致性哈希)</p>
+<p>根据<strong>key</strong>的hash值找到对应的服务区</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%887.52.37.png" alt></p>
+</li>
+</ol>
+<h3 id="Dubbo集群容错模式"><a href="#Dubbo集群容错模式" class="headerlink" title="Dubbo集群容错模式"></a>Dubbo集群容错模式</h3><p>当请求调用远程服务时，如果远程服务出错，dubbo会通过容错方案来解决。</p>
+<p><strong>集群容错模式:</strong></p>
+<ol>
+<li><p><strong>Failover Cluster</strong></p>
+<p>失败自动切换，当出现失败尝试重启其他服务器。通常用于读操作，但重试会带来更长的延迟。可以通过<strong><em>retries</em></strong> = “num” 来设置重试的次数。</p>
+<ol start="2">
+<li><strong>Failfast Cluster</strong></li>
+</ol>
+<p>快速失败，只发起一次调用，失败立即报错。通常用于非幂等性的写操作，如新增记录。</p>
+</li>
+</ol>
+<ol start="3">
+<li><p><strong>Failsafe Cluster</strong></p>
+<p>出现异常时直接忽略。通常用于写入审计日志等操作。</p>
+</li>
+<li><p><strong> FailBack Cluster</strong></p>
+<p>失败自动恢复，后台记录失败请求，定时重发。通常用于消息通知等操作。</p>
+</li>
+<li><p><strong>Forking Cluster</strong></p>
+<p>并行调用多个服务器，只要有一个成功就返回。缺点是会浪费服务器资源，可以通过 <strong>froks</strong> = “num”来设置最大的并行数。</p>
+</li>
+<li><p><strong>Broadcast Cluster</strong></p>
+<p>广播调用所有的服务提供者，只要有任意一台报错则报错。通常用于所有的服务提供者更新缓存或日志等本地资源消息。</p>
+</li>
+</ol>
+<p><strong>集群配置模式:</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">cluster</span>=<span class="string">"failsafe"</span>/&gt;</span></span><br><span class="line">或者</span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">cluster</span>=<span class="string">"failsafe"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -1247,7 +1504,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
