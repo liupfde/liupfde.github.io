@@ -79,22 +79,19 @@
 
 
 
-<meta name="description" content="Dubbo配置:dubbo.properties与属性加载顺序优先级(递减) Java  虚拟节参数设置: -Ddubbo.protocol.port = 20880     XML  通过Spring或者SpringBoot加载xml文件     Properties  全局的配置 dubbo.properties dubbo.protrocal.port = 20880     常用配置 ch">
+<meta name="description" content="CPU的态支持操作系统的最基本的硬件结构 CPU 内存 中断 时钟  CPU的态(Model) CPU的工作状态  对资源和指令使用权限的描述 特权指令:  LGDT/LIDT: 装载特殊寄存器 CLTS: 清除任务开关标志 STI/CTI: 允许和禁止中断 HALT: 停止CPU的工作 IN/OUT: 执行I/O操作 从核态转为用户态    态的分类 核态(Kernel mode)  能够访问所">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Dubbo入门">
-<meta property="og:url" content="http://yoursite.com/2019/04/19/Dubbo入门/index.html">
+<meta property="og:title" content="CPU的态和中断机制">
+<meta property="og:url" content="http://yoursite.com/2019/05/20/CPU的态和中断机制/index.html">
 <meta property="og:site_name" content="liupf&#39;s blog">
-<meta property="og:description" content="Dubbo配置:dubbo.properties与属性加载顺序优先级(递减) Java  虚拟节参数设置: -Ddubbo.protocol.port = 20880     XML  通过Spring或者SpringBoot加载xml文件     Properties  全局的配置 dubbo.properties dubbo.protrocal.port = 20880     常用配置 ch">
+<meta property="og:description" content="CPU的态支持操作系统的最基本的硬件结构 CPU 内存 中断 时钟  CPU的态(Model) CPU的工作状态  对资源和指令使用权限的描述 特权指令:  LGDT/LIDT: 装载特殊寄存器 CLTS: 清除任务开关标志 STI/CTI: 允许和禁止中断 HALT: 停止CPU的工作 IN/OUT: 执行I/O操作 从核态转为用户态    态的分类 核态(Kernel mode)  能够访问所">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%885.50.26.png">
-<meta property="og:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%885.55.44.png">
-<meta property="og:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%887.48.27.png">
-<meta property="og:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%887.52.37.png">
-<meta property="og:updated_time" content="2019-04-28T15:47:42.502Z">
+<meta property="og:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os1.png">
+<meta property="og:updated_time" content="2019-05-20T06:52:30.307Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dubbo入门">
-<meta name="twitter:description" content="Dubbo配置:dubbo.properties与属性加载顺序优先级(递减) Java  虚拟节参数设置: -Ddubbo.protocol.port = 20880     XML  通过Spring或者SpringBoot加载xml文件     Properties  全局的配置 dubbo.properties dubbo.protrocal.port = 20880     常用配置 ch">
-<meta name="twitter:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%885.50.26.png">
+<meta name="twitter:title" content="CPU的态和中断机制">
+<meta name="twitter:description" content="CPU的态支持操作系统的最基本的硬件结构 CPU 内存 中断 时钟  CPU的态(Model) CPU的工作状态  对资源和指令使用权限的描述 特权指令:  LGDT/LIDT: 装载特殊寄存器 CLTS: 清除任务开关标志 STI/CTI: 允许和禁止中断 HALT: 停止CPU的工作 IN/OUT: 执行I/O操作 从核态转为用户态    态的分类 核态(Kernel mode)  能够访问所">
+<meta name="twitter:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os1.png">
 
 
 
@@ -124,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/19/Dubbo入门/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/20/CPU的态和中断机制/">
 
 
 
 
 
-  <title>Dubbo入门 | liupf's blog</title>
+  <title>CPU的态和中断机制 | liupf's blog</title>
   
 
 
@@ -257,7 +254,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/Dubbo入门/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/20/CPU的态和中断机制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liupf">
@@ -274,7 +271,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Dubbo入门</h1>
+          <h1 class="post-title" itemprop="name headline">CPU的态和中断机制</h1>
         
 
         <div class="post-meta">
@@ -286,8 +283,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-19T10:15:28+08:00">
-                2019-04-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-20T13:35:17+08:00">
+                2019-05-20
               </time>
             
 
@@ -296,6 +293,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -324,91 +343,117 @@
       
 
       
-        <h3 id="Dubbo配置-dubbo-properties与属性加载顺序"><a href="#Dubbo配置-dubbo-properties与属性加载顺序" class="headerlink" title="Dubbo配置:dubbo.properties与属性加载顺序"></a>Dubbo配置:dubbo.properties与属性加载顺序</h3><h4 id="优先级-递减"><a href="#优先级-递减" class="headerlink" title="优先级(递减)"></a>优先级(递减)</h4><ol>
-<li><p>Java</p>
+        <h3 id="CPU的态"><a href="#CPU的态" class="headerlink" title="CPU的态"></a>CPU的态</h3><h4 id="支持操作系统的最基本的硬件结构"><a href="#支持操作系统的最基本的硬件结构" class="headerlink" title="支持操作系统的最基本的硬件结构"></a>支持操作系统的最基本的硬件结构</h4><ul>
+<li><strong>CPU</strong></li>
+<li><strong>内存</strong></li>
+<li><strong>中断</strong></li>
+<li><strong>时钟</strong></li>
+</ul>
+<h4 id="CPU的态-Model"><a href="#CPU的态-Model" class="headerlink" title="CPU的态(Model)"></a>CPU的态(Model)</h4><ul>
+<li><p>CPU的工作状态</p>
+</li>
+<li><p>对资源和指令使用权限的描述</p>
+<p>特权指令:</p>
 <ul>
-<li>虚拟节参数设置: -Ddubbo.protocol.port = 20880</li>
+<li>LGDT/LIDT: 装载特殊寄存器</li>
+<li>CLTS: 清除任务开关标志</li>
+<li><strong>STI/CTI: 允许和禁止中断</strong></li>
+<li>HALT: 停止CPU的工作</li>
+<li>IN/OUT: 执行I/O操作</li>
+<li>从核态转为用户态</li>
 </ul>
 </li>
-</ol>
-<ol start="2">
-<li><p>XML</p>
+</ul>
+<h4 id="态的分类"><a href="#态的分类" class="headerlink" title="态的分类"></a>态的分类</h4><ul>
+<li><p><strong>核态(Kernel mode)</strong></p>
 <ul>
-<li><p>通过Spring或者SpringBoot加载xml文件</p>
-<dubbo :protrocal port="30880">
-</dubbo></li>
+<li>能够访问所有的资源和执行所有的指令</li>
+<li>管理程序内核</li>
 </ul>
 </li>
-<li><p>Properties</p>
+<li><p><strong>用户态(User mode, 目态)</strong></p>
 <ul>
-<li><p>全局的配置 dubbo.properties</p>
-<p>dubbo.protrocal.port = 20880</p>
-</li>
+<li>仅能访问部分资源， 其他资源受限</li>
+<li>仅能管理用户程序</li>
 </ul>
 </li>
-</ol>
-<h4 id="常用配置"><a href="#常用配置" class="headerlink" title="常用配置"></a>常用配置</h4><ul>
-<li><p><strong>check=””</strong> 启动时是否检查 默认开启  </p>
-<p>例如 若服务提供者未启动 而服务消费者先启动了服务 若<strong>check=“true”</strong> 则报错阻止Spring启动 否则不报错</p>
+<li><p><strong>管态(Supervisor mode)</strong></p>
+<p>介于<strong>核态</strong>和<strong>用户态</strong>之间</p>
 </li>
-<li><p><strong>timeout=””</strong> 超时属性 单位毫秒</p>
-<p>超过多长时间就不等待了 防止大量线程阻塞(还可以指定方法超时)</p>
+</ul>
+<h4 id="用户态与内核态之间的转换"><a href="#用户态与内核态之间的转换" class="headerlink" title="用户态与内核态之间的转换"></a>用户态与内核态之间的转换</h4><ul>
+<li><p>用户态向内核态转换</p>
 <ul>
-<li>方法级优先 接口级次之 全局配置再次之</li>
-<li>如果级别一样则消费方优先于提供方</li>
+<li>用户请求OS服务</li>
+<li>发生中断(在内核态执行)</li>
+<li>用户进程错误(内部中断)</li>
+<li>用户态企图执行特权命令</li>
 </ul>
 </li>
-<li><p><strong>retries=””</strong> 调用失败后重试次数</p>
-</li>
-<li><p><strong>version=””</strong> 声明版本号 进行灰度发布</p>
+<li><p>核态向用户态转换</p>
+<p>一般是<strong>内核态执行完中断指令</strong>后返回</p>
 </li>
 </ul>
-<h3 id="Dubbo的负载均衡机制"><a href="#Dubbo的负载均衡机制" class="headerlink" title="Dubbo的负载均衡机制"></a>Dubbo的负载均衡机制</h3><ol>
-<li><p><strong>Random LoadBalance</strong>(基于权重的<strong><em>随机</em></strong>负载均衡机制)</p>
-<p>大量请求的情况下，请求基本上按照服务器配置的权重分散。</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%885.50.26.png" alt></p>
+<h4 id="CPU读取指令或数据时的访问顺序"><a href="#CPU读取指令或数据时的访问顺序" class="headerlink" title="CPU读取指令或数据时的访问顺序"></a>CPU读取指令或数据时的访问顺序</h4><ol>
+<li><p><strong>访问缓存(命中, HIT)</strong></p>
 </li>
-<li><p><strong>RoundRobin LoadBalance</strong>(基于权重的<strong><em>轮询</em></strong>负载均衡机制)</p>
-<p>常规的<strong>轮询</strong>负载均衡机制就是挨个遍历</p>
-<p>而基于<strong>权重</strong>的轮询，当请求过来之后会先看当前服务器轮询的次数是否已经达到了它在整个服务器集群所占的权重，如果达到了，就去请求别的服务器。</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%885.55.44.png" alt></p>
+<li><p><strong>访问内存(没有命中, MISS)</strong></p>
 </li>
-<li><p><strong>LeastActive LoadBalance</strong>(最少活跃数-负载均衡机制)</p>
-<p>根据上次的调用时间找到最快响应的服务器</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%887.48.27.png" alt></p>
-</li>
-<li><p><strong>ConsistentHash LoadBalance</strong>(一致性哈希)</p>
-<p>根据<strong>key</strong>的hash值找到对应的服务区</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%887.52.37.png" alt></p>
+<li><p><strong>访问辅存(缺页, PAGE_FAULT)</strong></p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os1.png" alt></p>
 </li>
 </ol>
-<h3 id="Dubbo集群容错模式"><a href="#Dubbo集群容错模式" class="headerlink" title="Dubbo集群容错模式"></a>Dubbo集群容错模式</h3><p>当请求调用远程服务时，如果远程服务出错，dubbo会通过容错方案来解决。</p>
-<p><strong>集群容错模式:</strong></p>
-<ol>
-<li><p><strong>Failover Cluster</strong></p>
-<p>失败自动切换，当出现失败尝试重启其他服务器。通常用于读操作，但重试会带来更长的延迟。可以通过<strong><em>retries</em></strong> = “num” 来设置重试的次数。</p>
-<ol start="2">
-<li><strong>Failfast Cluster</strong></li>
-</ol>
-<p>快速失败，只发起一次调用，失败立即报错。通常用于非幂等性的写操作，如新增记录。</p>
+<h3 id="中断机制"><a href="#中断机制" class="headerlink" title="中断机制"></a>中断机制</h3><h4 id="中断定义"><a href="#中断定义" class="headerlink" title="中断定义"></a>中断定义</h4><ul>
+<li>是指CPU对突发的外部事件的反应过程或机制</li>
+<li>CPU收到<strong>外部信号(中断信号)</strong>后，停止当前工作，转区处理该<strong>外部事件</strong>，处理完毕后回到原来工作的<strong>中断处(断点)</strong>继续工作</li>
+</ul>
+<h4 id="中断的概念"><a href="#中断的概念" class="headerlink" title="中断的概念"></a>中断的概念</h4><ul>
+<li><p><strong>断点</strong></p>
+<ul>
+<li><p>程序中断的地方，<strong>将要执行的下一条指令的地址</strong></p>
+</li>
+<li><p><strong>CS:IP</strong> </p>
+<p>程序要执行的下一条指令的地址就是放在这两个寄存器中</p>
+</li>
+</ul>
+</li>
+<li><p><strong>上下文</strong></p>
+<p>程序正确运行所依赖的信息集合</p>
+<ul>
+<li>相关寄存器</li>
+</ul>
+</li>
+<li><p><strong>上下文的两个处理过程</strong></p>
+<ul>
+<li>上下文的保护: 进入中断服务之前，<strong>入栈</strong></li>
+<li>上下文的恢复: 退出中断服务程序之后，<strong>出栈</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="中断响应的过程"><a href="#中断响应的过程" class="headerlink" title="中断响应的过程"></a>中断响应的过程</h4><ol>
+<li><p>识别中断源</p>
+<p>是谁产生了中断</p>
+</li>
+<li><p>保护断点和上下文信息</p>
+</li>
+<li><p>装入<strong>中断服务程序</strong>的入口地址(<strong>CS:IP</strong>)</p>
+</li>
+<li><p>进入中断服务程序</p>
+</li>
+<li><p>恢复现场和断点</p>
+</li>
+<li><p>中断返回: <strong>IRET</strong>指令</p>
+<p>会把断点弹出到<strong>CS:IP寄存器</strong>内，只要<strong>更新CS:IP的地址，将CS:IP的地址更新为原来断点的地址</strong>，那么原来的程序就可以继续运行。</p>
 </li>
 </ol>
-<ol start="3">
-<li><p><strong>Failsafe Cluster</strong></p>
-<p>出现异常时直接忽略。通常用于写入审计日志等操作。</p>
+<h4 id="中断响应的实质"><a href="#中断响应的实质" class="headerlink" title="中断响应的实质"></a>中断响应的实质</h4><ul>
+<li><p><strong>交换指令执行地址</strong></p>
+<p><strong>实际上就是CS:IP地址的更新，即当前程序的执行IP与中断程序的执行IP的交换</strong></p>
 </li>
-<li><p><strong> FailBack Cluster</strong></p>
-<p>失败自动恢复，后台记录失败请求，定时重发。通常用于消息通知等操作。</p>
+<li><p><strong>交换CPU的态</strong></p>
+<p>中断指令是在内核态执行的，所以会发生用户态和内核态的转换</p>
 </li>
-<li><p><strong>Forking Cluster</strong></p>
-<p>并行调用多个服务器，只要有一个成功就返回。缺点是会浪费服务器资源，可以通过 <strong>froks</strong> = “num”来设置最大的并行数。</p>
-</li>
-<li><p><strong>Broadcast Cluster</strong></p>
-<p>广播调用所有的服务提供者，只要有任意一台报错则报错。通常用于所有的服务提供者更新缓存或日志等本地资源消息。</p>
-</li>
-</ol>
-<p><strong>集群配置模式:</strong></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">cluster</span>=<span class="string">"failsafe"</span>/&gt;</span></span><br><span class="line">或者</span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">cluster</span>=<span class="string">"failsafe"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</ul>
 
       
     </div>
@@ -433,8 +478,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/18/b+树的基本原理与索引/" rel="next" title="b+树的基本原理与索引">
-                <i class="fa fa-chevron-left"></i> b+树的基本原理与索引
+              <a href="/2019/05/18/小记Servlet生命周期/" rel="next" title="小记Servlet生命周期">
+                <i class="fa fa-chevron-left"></i> 小记Servlet生命周期
               </a>
             
           </div>
@@ -442,10 +487,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/19/ASCII、Unicode、UTF-8之间的区别和联系/" rel="prev" title="ASCII、Unicode、UTF-8之间的区别和联系">
-                ASCII、Unicode、UTF-8之间的区别和联系 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -577,7 +618,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dubbo配置-dubbo-properties与属性加载顺序"><span class="nav-number">1.</span> <span class="nav-text">Dubbo配置:dubbo.properties与属性加载顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优先级-递减"><span class="nav-number">1.1.</span> <span class="nav-text">优先级(递减)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用配置"><span class="nav-number">1.2.</span> <span class="nav-text">常用配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dubbo的负载均衡机制"><span class="nav-number">2.</span> <span class="nav-text">Dubbo的负载均衡机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dubbo集群容错模式"><span class="nav-number">3.</span> <span class="nav-text">Dubbo集群容错模式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU的态"><span class="nav-number">1.</span> <span class="nav-text">CPU的态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#支持操作系统的最基本的硬件结构"><span class="nav-number">1.1.</span> <span class="nav-text">支持操作系统的最基本的硬件结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU的态-Model"><span class="nav-number">1.2.</span> <span class="nav-text">CPU的态(Model)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#态的分类"><span class="nav-number">1.3.</span> <span class="nav-text">态的分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用户态与内核态之间的转换"><span class="nav-number">1.4.</span> <span class="nav-text">用户态与内核态之间的转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU读取指令或数据时的访问顺序"><span class="nav-number">1.5.</span> <span class="nav-text">CPU读取指令或数据时的访问顺序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中断机制"><span class="nav-number">2.</span> <span class="nav-text">中断机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#中断定义"><span class="nav-number">2.1.</span> <span class="nav-text">中断定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断的概念"><span class="nav-number">2.2.</span> <span class="nav-text">中断的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断响应的过程"><span class="nav-number">2.3.</span> <span class="nav-text">中断响应的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断响应的实质"><span class="nav-number">2.4.</span> <span class="nav-text">中断响应的实质</span></a></li></ol></li></ol></div>
             
 
           </div>
