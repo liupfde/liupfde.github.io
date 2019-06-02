@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="CPU的态支持操作系统的最基本的硬件结构 CPU 内存 中断 时钟  CPU的态(Model) CPU的工作状态  对资源和指令使用权限的描述 特权指令:  LGDT/LIDT: 装载特殊寄存器 CLTS: 清除任务开关标志 STI/CTI: 允许和禁止中断 HALT: 停止CPU的工作 IN/OUT: 执行I/O操作 从核态转为用户态    态的分类 核态(Kernel mode)  能够访问所">
+<meta name="description" content="进程调度: 在合适的时候选择以一定的策略选择一个就绪进程运行 两个可以量化的衡量指标:  周转时间/平均周转时间 带权周转时间/带权平均周转时间  周转时间: ​    进程提交给计算机到最后完成所花费的时间(t) ​    t = tc - ts   ts:进程的提交时间(Start);   tc:进程的完成时间(Complete)      ​    意义: t说明了进程在系统中停留的时间长短">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CPU的态和中断机制">
-<meta property="og:url" content="http://yoursite.com/2019/05/20/CPU的态和中断机制/index.html">
+<meta property="og:title" content=" process scheduling">
+<meta property="og:url" content="http://yoursite.com/2019/06/01/process-scheduling/index.html">
 <meta property="og:site_name" content="liupf&#39;s blog">
-<meta property="og:description" content="CPU的态支持操作系统的最基本的硬件结构 CPU 内存 中断 时钟  CPU的态(Model) CPU的工作状态  对资源和指令使用权限的描述 特权指令:  LGDT/LIDT: 装载特殊寄存器 CLTS: 清除任务开关标志 STI/CTI: 允许和禁止中断 HALT: 停止CPU的工作 IN/OUT: 执行I/O操作 从核态转为用户态    态的分类 核态(Kernel mode)  能够访问所">
+<meta property="og:description" content="进程调度: 在合适的时候选择以一定的策略选择一个就绪进程运行 两个可以量化的衡量指标:  周转时间/平均周转时间 带权周转时间/带权平均周转时间  周转时间: ​    进程提交给计算机到最后完成所花费的时间(t) ​    t = tc - ts   ts:进程的提交时间(Start);   tc:进程的完成时间(Complete)      ​    意义: t说明了进程在系统中停留的时间长短">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os1.png">
-<meta property="og:updated_time" content="2019-05-20T06:52:30.307Z">
+<meta property="og:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os2.png">
+<meta property="og:updated_time" content="2019-06-02T05:19:08.460Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CPU的态和中断机制">
-<meta name="twitter:description" content="CPU的态支持操作系统的最基本的硬件结构 CPU 内存 中断 时钟  CPU的态(Model) CPU的工作状态  对资源和指令使用权限的描述 特权指令:  LGDT/LIDT: 装载特殊寄存器 CLTS: 清除任务开关标志 STI/CTI: 允许和禁止中断 HALT: 停止CPU的工作 IN/OUT: 执行I/O操作 从核态转为用户态    态的分类 核态(Kernel mode)  能够访问所">
-<meta name="twitter:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os1.png">
+<meta name="twitter:title" content=" process scheduling">
+<meta name="twitter:description" content="进程调度: 在合适的时候选择以一定的策略选择一个就绪进程运行 两个可以量化的衡量指标:  周转时间/平均周转时间 带权周转时间/带权平均周转时间  周转时间: ​    进程提交给计算机到最后完成所花费的时间(t) ​    t = tc - ts   ts:进程的提交时间(Start);   tc:进程的完成时间(Complete)      ​    意义: t说明了进程在系统中停留的时间长短">
+<meta name="twitter:image" content="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os2.png">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/20/CPU的态和中断机制/">
+  <link rel="canonical" href="http://yoursite.com/2019/06/01/process-scheduling/">
 
 
 
 
 
-  <title>CPU的态和中断机制 | liupf's blog</title>
+  <title> process scheduling | liupf's blog</title>
   
 
 
@@ -254,7 +254,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/20/CPU的态和中断机制/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/01/process-scheduling/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liupf">
@@ -271,7 +271,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CPU的态和中断机制</h1>
+          <h1 class="post-title" itemprop="name headline"> process scheduling</h1>
         
 
         <div class="post-meta">
@@ -283,8 +283,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-20T13:35:17+08:00">
-                2019-05-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-01T21:38:44+08:00">
+                2019-06-01
               </time>
             
 
@@ -343,115 +343,147 @@
       
 
       
-        <h3 id="CPU的态"><a href="#CPU的态" class="headerlink" title="CPU的态"></a>CPU的态</h3><h4 id="支持操作系统的最基本的硬件结构"><a href="#支持操作系统的最基本的硬件结构" class="headerlink" title="支持操作系统的最基本的硬件结构"></a>支持操作系统的最基本的硬件结构</h4><ul>
-<li><strong>CPU</strong></li>
-<li><strong>内存</strong></li>
-<li><strong>中断</strong></li>
-<li><strong>时钟</strong></li>
-</ul>
-<h4 id="CPU的态-Model"><a href="#CPU的态-Model" class="headerlink" title="CPU的态(Model)"></a>CPU的态(Model)</h4><ul>
-<li><p>CPU的工作状态</p>
-</li>
-<li><p>对资源和指令使用权限的描述</p>
-<p>特权指令:</p>
+        <p><strong>进程调度: 在合适的时候选择以一定的策略选择一个就绪进程运行</strong></p>
+<p>两个可以量化的衡量指标:</p>
 <ul>
-<li>LGDT/LIDT: 装载特殊寄存器</li>
-<li>CLTS: 清除任务开关标志</li>
-<li><strong>STI/CTI: 允许和禁止中断</strong></li>
-<li>HALT: 停止CPU的工作</li>
-<li>IN/OUT: 执行I/O操作</li>
-<li>从核态转为用户态</li>
+<li><strong>周转时间/平均周转时间</strong></li>
+<li><strong>带权周转时间/带权平均周转时间</strong></li>
 </ul>
+<p><strong>周转时间:</strong></p>
+<p>​    进程提交给计算机到最后完成所花费的时间(t)</p>
+<p>​    t = tc - ts   ts:进程的提交时间(Start);   tc:进程的完成时间(Complete)     </p>
+<p>​    <strong>意义: t说明了进程在系统中停留的时间长短</strong></p>
+<p><strong>平均周转时间:</strong></p>
+<p>t = (t1 +  t2 + t3…. + tn) / n</p>
+<p>​    <strong>意义:平均周转时间越短，意味着进程在系统中的停留的时间越短，因而系统的吞吐量就越大，资源利用率就</strong>          <strong>越高</strong></p>
+<p><strong>带权周转时间w:</strong></p>
+<p>​    小的进程所花费的周转时间肯定小，大的进程花费的时间肯定大，所以引入带权周转时间。</p>
+<p>​    <strong>w = t / tr</strong>        t:进程的周转时间;    tr:进程的运行时间</p>
+<p>​    意义:进程在系统中<strong>相对</strong>停留时间</p>
+<p><strong>平均带权周转时间</strong></p>
+<p>​    w = (w1 + w2 + w3 + … + wn) / n</p>
+<hr>
+<h3 id="典型的调度算法"><a href="#典型的调度算法" class="headerlink" title="典型的调度算法"></a>典型的调度算法</h3><h4 id="先来先服务-First-Come-First-Serve"><a href="#先来先服务-First-Come-First-Serve" class="headerlink" title="先来先服务(First Come First Serve)"></a>先来先服务(First Come First Serve)</h4><ul>
+<li><p><strong>算法</strong></p>
+<p>按照作业进入系统的时间先后来挑选作业，<strong>先进入系统的作业优先被运行</strong></p>
 </li>
-</ul>
-<h4 id="态的分类"><a href="#态的分类" class="headerlink" title="态的分类"></a>态的分类</h4><ul>
-<li><p><strong>核态(Kernel mode)</strong></p>
+<li><p><strong>特点</strong></p>
 <ul>
-<li>能够访问所有的资源和执行所有的指令</li>
-<li>管理程序内核</li>
+<li>容易实现 效率不高</li>
+<li><strong>只考虑了作业的等候时间，没有考虑作业运行时间的长短。</strong>因此一个晚来的但是运行时间很短的作业可能需要等待很长时间才能被运行。<strong>不利于短作业执行。</strong></li>
 </ul>
 </li>
-<li><p><strong>用户态(User mode, 目态)</strong></p>
+</ul>
+<h4 id="短作业优先调度算法-Short-Job-First"><a href="#短作业优先调度算法-Short-Job-First" class="headerlink" title="短作业优先调度算法(Short Job First)"></a>短作业优先调度算法(Short Job First)</h4><ul>
+<li><p><strong>算法</strong></p>
+<p>参考运行时间。选取运行时间最短的作业投入运行</p>
+</li>
+<li><p><strong>特点</strong></p>
 <ul>
-<li>仅能访问部分资源， 其他资源受限</li>
-<li>仅能管理用户程序</li>
+<li>容易实现 效率不高</li>
+<li><strong>忽视了作业的等待时间</strong>，一个早来但是很长的作业将会长时间得不到运行，易出现资源饥饿现象。</li>
 </ul>
 </li>
-<li><p><strong>管态(Supervisor mode)</strong></p>
-<p>介于<strong>核态</strong>和<strong>用户态</strong>之间</p>
-</li>
 </ul>
-<h4 id="用户态与内核态之间的转换"><a href="#用户态与内核态之间的转换" class="headerlink" title="用户态与内核态之间的转换"></a>用户态与内核态之间的转换</h4><ul>
-<li><p>用户态向内核态转换</p>
+<h4 id="响应比优先调度算法"><a href="#响应比优先调度算法" class="headerlink" title="响应比优先调度算法"></a>响应比优先调度算法</h4><ul>
+<li><p><strong>响应比定义: </strong> 作业的<strong>响应时间和</strong>与<strong>运行时间</strong>的比值。</p>
+<p>响应比 = 响应时间 / 运行时间</p>
+<p>​            = (等待时间 + 运行时间) / 运行时间</p>
+<p>​            = 1 + 等待时间 / 运行时间</p>
+</li>
+<li><p><strong>算法</strong></p>
+<p>计算每个作业的响应比，选择<strong>响应比最高</strong>的作业优先投入运行</p>
+</li>
+<li><p><strong>特点(兼顾了长作业和短作业)</strong></p>
+<p><strong>响应比 = 1 + 等待时间 / 运行时间</strong></p>
 <ul>
-<li>用户请求OS服务</li>
-<li>发生中断(在内核态执行)</li>
-<li>用户进程错误(内部中断)</li>
-<li>用户态企图执行特权命令</li>
+<li>如果作业<strong>等待时间</strong>相同，则运行时间越短的作业越先被执行，有利于短作业</li>
+<li>如果作业<strong>运行时间</strong>相同，则等待时间越长的作业越先被执行，等待时间长的作业</li>
+<li>对于一个运行时间长的作业，只要他等待的时间足够长，那么响应比就会增加，可能获取cpu</li>
 </ul>
 </li>
-<li><p>核态向用户态转换</p>
-<p>一般是<strong>内核态执行完中断指令</strong>后返回</p>
-</li>
 </ul>
-<h4 id="CPU读取指令或数据时的访问顺序"><a href="#CPU读取指令或数据时的访问顺序" class="headerlink" title="CPU读取指令或数据时的访问顺序"></a>CPU读取指令或数据时的访问顺序</h4><ol>
-<li><p><strong>访问缓存(命中, HIT)</strong></p>
-</li>
-<li><p><strong>访问内存(没有命中, MISS)</strong></p>
-</li>
-<li><p><strong>访问辅存(缺页, PAGE_FAULT)</strong></p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os1.png" alt></p>
-</li>
-</ol>
-<h3 id="中断机制"><a href="#中断机制" class="headerlink" title="中断机制"></a>中断机制</h3><h4 id="中断定义"><a href="#中断定义" class="headerlink" title="中断定义"></a>中断定义</h4><ul>
-<li>是指CPU对突发的外部事件的反应过程或机制</li>
-<li>CPU收到<strong>外部信号(中断信号)</strong>后，停止当前工作，转区处理该<strong>外部事件</strong>，处理完毕后回到原来工作的<strong>中断处(断点)</strong>继续工作</li>
-</ul>
-<h4 id="中断的概念"><a href="#中断的概念" class="headerlink" title="中断的概念"></a>中断的概念</h4><ul>
-<li><p><strong>断点</strong></p>
+<h4 id="优先数调度算法"><a href="#优先数调度算法" class="headerlink" title="优先数调度算法"></a>优先数调度算法</h4><ul>
+<li><p><strong>算法</strong></p>
 <ul>
-<li><p>程序中断的地方，<strong>将要执行的下一条指令的地址</strong></p>
-</li>
-<li><p><strong>CS:IP</strong> </p>
-<p>程序要执行的下一条指令的地址就是放在这两个寄存器中</p>
-</li>
+<li>根据进程优先数，把CPU分配给优先数最大的进程</li>
+<li><strong>优先数 = 静态优先数 + 动态优先数</strong></li>
 </ul>
 </li>
-<li><p><strong>上下文</strong></p>
-<p>程序正确运行所依赖的信息集合</p>
+<li><p><strong>静态优先数</strong></p>
+<p>进程创建时确定，整个进程运行期间不改变</p>
 <ul>
-<li>相关寄存器</li>
+<li><strong>静态优先数的确定</strong><ul>
+<li><strong>基于进程所需资源的多少</strong></li>
+<li><strong>基于程序运行时间的长短</strong></li>
+<li><strong>进程的类型(IO/CPU,核心/用户,前端/后台)</strong></li>
 </ul>
 </li>
-<li><p><strong>上下文的两个处理过程</strong></p>
+</ul>
+</li>
+<li><p><strong>动态优先数</strong></p>
+<p>优先数在进程运行期间可以改变</p>
 <ul>
-<li>上下文的保护: 进入中断服务之前，<strong>入栈</strong></li>
-<li>上下文的恢复: 退出中断服务程序之后，<strong>出栈</strong></li>
+<li><p><strong>动态优先数的确定</strong></p>
+<ul>
+<li><p><strong>当使用CPU使用超过一定时长时</strong></p>
+<p>可以适当降低</p>
+</li>
+<li><p><strong>当进行I/O操作后</strong></p>
+</li>
+<li><p><strong>当进程等待超过一定时长时</strong></p>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
-<h4 id="中断响应的过程"><a href="#中断响应的过程" class="headerlink" title="中断响应的过程"></a>中断响应的过程</h4><ol>
-<li><p>识别中断源</p>
-<p>是谁产生了中断</p>
+<h4 id="循环论转调度算法-ROUND-ROBIN"><a href="#循环论转调度算法-ROUND-ROBIN" class="headerlink" title="循环论转调度算法(ROUND-ROBIN)"></a>循环论转调度算法(ROUND-ROBIN)</h4><ul>
+<li><p><strong>概念</strong></p>
+<ul>
+<li><p>把所有就绪进程<strong>按先进先出的原则排成队列</strong>。新来的进程加到<strong>队列的末尾</strong>。</p>
 </li>
-<li><p>保护断点和上下文信息</p>
+<li><p><strong>进程以时间片q为单位轮流使用CPU。</strong>刚刚运行完的一个时间片进程排到队列末尾，等候下一轮运行。</p>
+<p>如果当前进程在时间片p内运行完成则撤出队列，否则加入队列末尾。</p>
 </li>
-<li><p>装入<strong>中断服务程序</strong>的入口地址(<strong>CS:IP</strong>)</p>
+<li><p>队列逻辑上是环形的。</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os2.png" alt></p>
 </li>
-<li><p>进入中断服务程序</p>
+</ul>
 </li>
-<li><p>恢复现场和断点</p>
+<li><p><strong>优点</strong></p>
+<ul>
+<li><strong>公平性:</strong> 每个进程有平等的机会获取CPU。</li>
+<li><strong>交互性:</strong> 每个进程等待 (N - 1) * q 的时间就可以重新获得CPU</li>
+</ul>
 </li>
-<li><p>中断返回: <strong>IRET</strong>指令</p>
-<p>会把断点弹出到<strong>CS:IP寄存器</strong>内，只要<strong>更新CS:IP的地址，将CS:IP的地址更新为原来断点的地址</strong>，那么原来的程序就可以继续运行。</p>
+<li><p>时间片<strong>q</strong>的大小</p>
+<ul>
+<li><p>如果q太大</p>
+<p>则会导致交互性变差，每个进程等待的时间变长，甚至退化成<strong>FCFS</strong>算法</p>
 </li>
-</ol>
-<h4 id="中断响应的实质"><a href="#中断响应的实质" class="headerlink" title="中断响应的实质"></a>中断响应的实质</h4><ul>
-<li><p><strong>交换指令执行地址</strong></p>
-<p><strong>实际上就是CS:IP地址的更新，即当前程序的执行IP与中断程序的执行IP的交换</strong></p>
+<li><p>如果<strong>q</strong>太小</p>
+<p>则进程切换频繁，系统开销增加</p>
 </li>
-<li><p><strong>交换CPU的态</strong></p>
-<p>中断指令是在内核态执行的，所以会发生用户态和内核态的转换</p>
+</ul>
+</li>
+<li><p><strong>两种改进方法</strong></p>
+<ul>
+<li><strong>时间片的大小可以改变</strong></li>
+<li><strong>组织多个就绪队列</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="Linux进程调度"><a href="#Linux进程调度" class="headerlink" title="Linux进程调度"></a>Linux进程调度</h4><ul>
+<li><strong>普通进程</strong><ul>
+<li>采用<strong>动态优先级</strong>调度</li>
+<li>调度程序周期性的修改优先级(<strong>避免饥饿</strong>)</li>
+</ul>
+</li>
+<li><strong>实时进程</strong><ul>
+<li>采用<strong>静态优先级</strong>调度</li>
+<li>由用户预先指定，以后不会改变</li>
+</ul>
 </li>
 </ul>
 
@@ -478,8 +510,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/18/小记Servlet生命周期/" rel="next" title="小记Servlet生命周期">
-                <i class="fa fa-chevron-left"></i> 小记Servlet生命周期
+              <a href="/2019/05/28/process/" rel="next" title="process">
+                <i class="fa fa-chevron-left"></i> process
               </a>
             
           </div>
@@ -487,10 +519,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/28/process/" rel="prev" title="process">
-                process <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -622,7 +650,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU的态"><span class="nav-number">1.</span> <span class="nav-text">CPU的态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#支持操作系统的最基本的硬件结构"><span class="nav-number">1.1.</span> <span class="nav-text">支持操作系统的最基本的硬件结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU的态-Model"><span class="nav-number">1.2.</span> <span class="nav-text">CPU的态(Model)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#态的分类"><span class="nav-number">1.3.</span> <span class="nav-text">态的分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用户态与内核态之间的转换"><span class="nav-number">1.4.</span> <span class="nav-text">用户态与内核态之间的转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU读取指令或数据时的访问顺序"><span class="nav-number">1.5.</span> <span class="nav-text">CPU读取指令或数据时的访问顺序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中断机制"><span class="nav-number">2.</span> <span class="nav-text">中断机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#中断定义"><span class="nav-number">2.1.</span> <span class="nav-text">中断定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断的概念"><span class="nav-number">2.2.</span> <span class="nav-text">中断的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断响应的过程"><span class="nav-number">2.3.</span> <span class="nav-text">中断响应的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断响应的实质"><span class="nav-number">2.4.</span> <span class="nav-text">中断响应的实质</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#典型的调度算法"><span class="nav-number">1.</span> <span class="nav-text">典型的调度算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#先来先服务-First-Come-First-Serve"><span class="nav-number">1.1.</span> <span class="nav-text">先来先服务(First Come First Serve)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#短作业优先调度算法-Short-Job-First"><span class="nav-number">1.2.</span> <span class="nav-text">短作业优先调度算法(Short Job First)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#响应比优先调度算法"><span class="nav-number">1.3.</span> <span class="nav-text">响应比优先调度算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优先数调度算法"><span class="nav-number">1.4.</span> <span class="nav-text">优先数调度算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#循环论转调度算法-ROUND-ROBIN"><span class="nav-number">1.5.</span> <span class="nav-text">循环论转调度算法(ROUND-ROBIN)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux进程调度"><span class="nav-number">1.6.</span> <span class="nav-text">Linux进程调度</span></a></li></ol></li></ol></div>
             
 
           </div>

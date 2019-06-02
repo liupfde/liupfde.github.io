@@ -249,6 +249,290 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/01/process-scheduling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="liupf">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="liupf's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/01/process-scheduling/" itemprop="url"> process scheduling</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-01T21:38:44+08:00">
+                2019-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>进程调度: 在合适的时候选择以一定的策略选择一个就绪进程运行</strong></p>
+<p>两个可以量化的衡量指标:</p>
+<ul>
+<li><strong>周转时间/平均周转时间</strong></li>
+<li><strong>带权周转时间/带权平均周转时间</strong></li>
+</ul>
+<p><strong>周转时间:</strong></p>
+<p>​    进程提交给计算机到最后完成所花费的时间(t)</p>
+<p>​    t = tc - ts   ts:进程的提交时间(Start);   tc:进程的完成时间(Complete)     </p>
+<p>​    <strong>意义: t说明了进程在系统中停留的时间长短</strong></p>
+<p><strong>平均周转时间:</strong></p>
+<p>t = (t1 +  t2 + t3…. + tn) / n</p>
+<p>​    <strong>意义:平均周转时间越短，意味着进程在系统中的停留的时间越短，因而系统的吞吐量就越大，资源利用率就</strong>          <strong>越高</strong></p>
+<p><strong>带权周转时间w:</strong></p>
+<p>​    小的进程所花费的周转时间肯定小，大的进程花费的时间肯定大，所以引入带权周转时间。</p>
+<p>​    <strong>w = t / tr</strong>        t:进程的周转时间;    tr:进程的运行时间</p>
+<p>​    意义:进程在系统中<strong>相对</strong>停留时间</p>
+<p><strong>平均带权周转时间</strong></p>
+<p>​    w = (w1 + w2 + w3 + … + wn) / n</p>
+<hr>
+<h3 id="典型的调度算法"><a href="#典型的调度算法" class="headerlink" title="典型的调度算法"></a>典型的调度算法</h3><h4 id="先来先服务-First-Come-First-Serve"><a href="#先来先服务-First-Come-First-Serve" class="headerlink" title="先来先服务(First Come First Serve)"></a>先来先服务(First Come First Serve)</h4><ul>
+<li><p><strong>算法</strong></p>
+<p>按照作业进入系统的时间先后来挑选作业，<strong>先进入系统的作业优先被运行</strong></p>
+</li>
+<li><p><strong>特点</strong></p>
+<ul>
+<li>容易实现 效率不高</li>
+<li><strong>只考虑了作业的等候时间，没有考虑作业运行时间的长短。</strong>因此一个晚来的但是运行时间很短的作业可能需要等待很长时间才能被运行。<strong>不利于短作业执行。</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="短作业优先调度算法-Short-Job-First"><a href="#短作业优先调度算法-Short-Job-First" class="headerlink" title="短作业优先调度算法(Short Job First)"></a>短作业优先调度算法(Short Job First)</h4><ul>
+<li><p><strong>算法</strong></p>
+<p>参考运行时间。选取运行时间最短的作业投入运行</p>
+</li>
+<li><p><strong>特点</strong></p>
+<ul>
+<li>容易实现 效率不高</li>
+<li><strong>忽视了作业的等待时间</strong>，一个早来但是很长的作业将会长时间得不到运行，易出现资源饥饿现象。</li>
+</ul>
+</li>
+</ul>
+<h4 id="响应比优先调度算法"><a href="#响应比优先调度算法" class="headerlink" title="响应比优先调度算法"></a>响应比优先调度算法</h4><ul>
+<li><p><strong>响应比定义: </strong> 作业的<strong>响应时间和</strong>与<strong>运行时间</strong>的比值。</p>
+<p>响应比 = 响应时间 / 运行时间</p>
+<p>​            = (等待时间 + 运行时间) / 运行时间</p>
+<p>​            = 1 + 等待时间 / 运行时间</p>
+</li>
+<li><p><strong>算法</strong></p>
+<p>计算每个作业的响应比，选择<strong>响应比最高</strong>的作业优先投入运行</p>
+</li>
+<li><p><strong>特点(兼顾了长作业和短作业)</strong></p>
+<p><strong>响应比 = 1 + 等待时间 / 运行时间</strong></p>
+<ul>
+<li>如果作业<strong>等待时间</strong>相同，则运行时间越短的作业越先被执行，有利于短作业</li>
+<li>如果作业<strong>运行时间</strong>相同，则等待时间越长的作业越先被执行，等待时间长的作业</li>
+<li>对于一个运行时间长的作业，只要他等待的时间足够长，那么响应比就会增加，可能获取cpu</li>
+</ul>
+</li>
+</ul>
+<h4 id="优先数调度算法"><a href="#优先数调度算法" class="headerlink" title="优先数调度算法"></a>优先数调度算法</h4><ul>
+<li><p><strong>算法</strong></p>
+<ul>
+<li>根据进程优先数，把CPU分配给优先数最大的进程</li>
+<li><strong>优先数 = 静态优先数 + 动态优先数</strong></li>
+</ul>
+</li>
+<li><p><strong>静态优先数</strong></p>
+<p>进程创建时确定，整个进程运行期间不改变</p>
+<ul>
+<li><strong>静态优先数的确定</strong><ul>
+<li><strong>基于进程所需资源的多少</strong></li>
+<li><strong>基于程序运行时间的长短</strong></li>
+<li><strong>进程的类型(IO/CPU,核心/用户,前端/后台)</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>动态优先数</strong></p>
+<p>优先数在进程运行期间可以改变</p>
+<ul>
+<li><p><strong>动态优先数的确定</strong></p>
+<ul>
+<li><p><strong>当使用CPU使用超过一定时长时</strong></p>
+<p>可以适当降低</p>
+</li>
+<li><p><strong>当进行I/O操作后</strong></p>
+</li>
+<li><p><strong>当进程等待超过一定时长时</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="循环论转调度算法-ROUND-ROBIN"><a href="#循环论转调度算法-ROUND-ROBIN" class="headerlink" title="循环论转调度算法(ROUND-ROBIN)"></a>循环论转调度算法(ROUND-ROBIN)</h4><ul>
+<li><p><strong>概念</strong></p>
+<ul>
+<li><p>把所有就绪进程<strong>按先进先出的原则排成队列</strong>。新来的进程加到<strong>队列的末尾</strong>。</p>
+</li>
+<li><p><strong>进程以时间片q为单位轮流使用CPU。</strong>刚刚运行完的一个时间片进程排到队列末尾，等候下一轮运行。</p>
+<p>如果当前进程在时间片p内运行完成则撤出队列，否则加入队列末尾。</p>
+</li>
+<li><p>队列逻辑上是环形的。</p>
+<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/OS/os2.png" alt></p>
+</li>
+</ul>
+</li>
+<li><p><strong>优点</strong></p>
+<ul>
+<li><strong>公平性:</strong> 每个进程有平等的机会获取CPU。</li>
+<li><strong>交互性:</strong> 每个进程等待 (N - 1) * q 的时间就可以重新获得CPU</li>
+</ul>
+</li>
+<li><p>时间片<strong>q</strong>的大小</p>
+<ul>
+<li><p>如果q太大</p>
+<p>则会导致交互性变差，每个进程等待的时间变长，甚至退化成<strong>FCFS</strong>算法</p>
+</li>
+<li><p>如果<strong>q</strong>太小</p>
+<p>则进程切换频繁，系统开销增加</p>
+</li>
+</ul>
+</li>
+<li><p><strong>两种改进方法</strong></p>
+<ul>
+<li><strong>时间片的大小可以改变</strong></li>
+<li><strong>组织多个就绪队列</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="Linux进程调度"><a href="#Linux进程调度" class="headerlink" title="Linux进程调度"></a>Linux进程调度</h4><ul>
+<li><strong>普通进程</strong><ul>
+<li>采用<strong>动态优先级</strong>调度</li>
+<li>调度程序周期性的修改优先级(<strong>避免饥饿</strong>)</li>
+</ul>
+</li>
+<li><strong>实时进程</strong><ul>
+<li>采用<strong>静态优先级</strong>调度</li>
+<li>由用户预先指定，以后不会改变</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/28/process/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2134,189 +2418,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/18/b+树的基本原理与索引/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="liupf">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="liupf's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/18/b+树的基本原理与索引/" itemprop="url">b+树的基本原理与索引</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-18T21:27:56+08:00">
-                2019-04-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>为了描述B-Tree，首先定义一条数据记录为一个二元组<strong>[key, data]</strong>，key为记录的键值，对于不同的数据记录key是互不相同的；data为数据记录除key以外的数据。则B-Tree是满足下列条件的数据结构:</p>
-<ul>
-<li>d为大于1的一个正整数，称为B-Tree的度。</li>
-<li>h为一个正整数，称为B-Tree的高度</li>
-<li>每个非叶子结点有n-1个key和n个指针组成，其中d&lt;=n&lt;=2d。</li>
-<li>每个叶子结点最少包含一个key和两个指针，最多包含2d-1个key和2d个指针，叶结点的指针为null</li>
-<li>所有的叶结点有相同的深度，等于树高h</li>
-<li>key和指针互相间隔，节点两端是指针</li>
-<li>如果某个指针在节点node最右边且不为null，则其指向节点的所有key大于v(keym)，其中v(keym)为node的最后一个key的值。</li>
-<li>如果某个指针在节点node耳朵左右相邻key分别是key(i)和key(i+1)且不为null，则其指向节点的所有key:v(key(i)) &lt; k &lt;v(key(i+1)) 下图是一个d=2的B-Tree示意图</li>
-</ul>
-<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27xvzv1hjj30cq037mx4.jpg" alt="image281"></p>
-<ul>
-<li><p>一个节点由以下三部分组成</p>
-<ul>
-<li>key</li>
-<li>data</li>
-<li>指针</li>
-</ul>
-</li>
-</ul>
-<p>有以上性质可以定义出B-Tree的查找算法:</p>
-<p>​    首先从根节点进行<strong>二分查找</strong>，如果找到就返回对应的节点data，否则对相应区间的指针指向的节点递归进行查找，直到找到节点(查找成功)或找到null指针(查找失败)。</p>
-<p><strong>B-Tree的一些性质:</strong></p>
-<ul>
-<li>一个度为d的B-Tree，设其索引N个key，则其树高h的上限$log_d(N+1)/2$，检索一个key的时间复杂度为O($log_dN$)。</li>
-</ul>
-<p><strong>B+Tree</strong></p>
-<p>与B-Tree相比，B+Tree有以下的不同点:</p>
-<ol>
-<li><p>每个节点的指针上限为2d而不是2d+1。</p>
-</li>
-<li><p>内节点不存储data，只存储key；叶子节点不存储指针。</p>
-<p>下图是一个B+Tree的示意图</p>
-<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27y9wpnryj30f305b74c.jpg" alt="image4"></p>
-<ol start="3">
-<li>由于并不是所有节点都具有相同的域，因此B+Tree中叶节点和内节点一般大小不同。这点与B-Tree不同，虽然B-Tree中不同节点存放的key和指针可能数量不一致，但是每个节点的域和上限是一致的，所以在实现中B-Tree往往对每个节点申请同等大小的空间。</li>
-</ol>
-</li>
-</ol>
-<p>带有顺序访问指针的B+Tree</p>
-<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27yri43rij30f305bmx8.jpg" alt="image381"></p>
-<p>在B+Tree的每个叶子节点增加一个指向相邻叶子节点的指针，就形成了带有顺序访问指针的B+Tree。做这个优化的目的是为了提高区间访问的性能，例如上图如果要查询key为从18到49的所有数据记录，当找到18后，只需顺着节点和指针顺序遍历就可以一次性访问到所有数据节点，极大提到了区间查询效率。</p>
-<hr>
-<p><strong>B树与索引</strong></p>
-<p>一般来说，索引本身很大，不可能全部存储在内存中，因此索引往往以索引文件的形式存储在磁盘上。<strong>这样索引查找的过程就要产生磁盘I/O的消耗</strong>，I/O的消耗要比内存高几个数量级，所以要尽量减少查找过程中磁盘I/O的存取次数。</p>
-<p>根据局部性原理和磁盘预读原理一次I/O的时候会预读<strong>页(page)</strong>的整数倍的数据，而数据库将一个节点的大小设置等于一个页，这样每个节点只需要一次磁盘I/O就可以完全载入。</p>
-<p><strong>MySQL索引的实现</strong></p>
-<ul>
-<li><p>MyISAM引擎</p>
-<p>MyISAM采用非聚簇索引的形式，即叶结点的data域存放的是数据记录的地址。<strong>MyISAM的索引文件仅仅保存数据记录的地址。</strong></p>
-<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g27zwau1jdj30ig0eujs1.jpg" alt="image11111">在MyISAM中，主索引和辅助索引在结构上没有区别，只是主索引要求key是唯一的。</p>
-</li>
-</ul>
-<ul>
-<li><p>InnoDB引擎</p>
-<p>InnoDB采用聚簇索引的形式，即InnoDB的数据文件本身就是索引文件。对于主键索引来说，其中key是索引，data域存放的就是数据。</p>
-<p><img src="http://pqghh5se3.bkt.clouddn.com/b+%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E4%B8%8E%E7%B4%A2%E5%BC%95/006tNc79ly1g2802tvo2ej30f306pjrj.jpg" alt="image111"></p>
-<p>对于辅助索引来说，key是辅助索引，而data域存放的是主键，最终会通过主键查找出具体的数据。</p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -2360,7 +2468,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
