@@ -249,6 +249,206 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/03/SpringBoot自动配置原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="liupf">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="liupf's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/03/SpringBoot自动配置原理/" itemprop="url">SpringBoot自动配置原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-03T16:32:35+08:00">
+                2019-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>自动配置原理</strong></p>
+<ol>
+<li><p>在SpringBoot启动类中有<strong>@SpringBootApplication</strong>注解。进入该注解看到该类上有<strong>@EnableAutoConfiguration</strong>注解，这个注解就是SpringBoot自动配置的入口。</p>
+</li>
+<li><p><strong>@EnableAutoConfiguration</strong>利用选择器<a href="mailto:**@AutoConfigurationImportSelector.class" target="_blank" rel="noopener">**@AutoConfigurationImportSelector.class</a>**给容器导入一些组件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@AutoConfigurationPackage</span></span><br><span class="line"><span class="comment">//从这里导入一些组件</span></span><br><span class="line"><span class="meta">@Import</span>(&#123;AutoConfigurationImportSelector.class&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> EnableAutoConfiguration &#123;</span><br><span class="line">    String ENABLED_OVERRIDE_PROPERTY = <span class="string">"spring.boot.enableautoconfiguration"</span>;</span><br><span class="line"></span><br><span class="line">    Class&lt;?&gt;[] exclude() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    String[] excludeName() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后进入<strong>AutoConfigurationImportSelector</strong>类，其中有一个<strong>selectImports(AnnotationMetadata annotationMetadata)</strong>方法，该方法内<strong>this.getAutoConfigurationEntry(autoConfigurationMetadata, annotationMetadata);</strong>方法最终会调用到以下方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> AutoConfigurationImportSelector.<span class="function">AutoConfigurationEntry <span class="title">getAutoConfigurationEntry</span><span class="params">(AutoConfigurationMetadata autoConfigurationMetadata, AnnotationMetadata annotationMetadata)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.isEnabled(annotationMetadata)) &#123;</span><br><span class="line">        <span class="keyword">return</span> EMPTY_ENTRY;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        AnnotationAttributes attributes = <span class="keyword">this</span>.getAttributes(annotationMetadata);</span><br><span class="line">      <span class="comment">//获取候选的配置</span></span><br><span class="line">        List&lt;String&gt; configurations = <span class="keyword">this</span>.getCandidateConfigurations(annotationMetadata, attributes);</span><br><span class="line">        configurations = <span class="keyword">this</span>.removeDuplicates(configurations);</span><br><span class="line">        Set&lt;String&gt; exclusions = <span class="keyword">this</span>.getExclusions(annotationMetadata, attributes);</span><br><span class="line">        <span class="keyword">this</span>.checkExcludedClasses(configurations, exclusions);</span><br><span class="line">        configurations.removeAll(exclusions);</span><br><span class="line">        configurations = <span class="keyword">this</span>.filter(configurations, autoConfigurationMetadata);</span><br><span class="line">        <span class="keyword">this</span>.fireAutoConfigurationImportEvents(configurations, exclusions);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AutoConfigurationImportSelector.AutoConfigurationEntry(configurations, exclusions);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<strong>List<string> configurations = this.getCandidateConfigurations(annotationMetadata, attributes);</string></strong>是获取候选的配置。</p>
+<ul>
+<li><p>进入<strong>getCandidateConfigurations(annotationMetadata, attributes)</strong>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> List&lt;String&gt; <span class="title">getCandidateConfigurations</span><span class="params">(AnnotationMetadata metadata, AnnotationAttributes attributes)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(<span class="keyword">this</span>.getSpringFactoriesLoaderFactoryClass(), <span class="keyword">this</span>.getBeanClassLoader());</span><br><span class="line">    Assert.notEmpty(configurations, <span class="string">"No auto configuration classes found in META-INF/spring.factories. If you are using a custom packaging, make sure that file is correct."</span>);</span><br><span class="line">    <span class="keyword">return</span> configurations;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这行代码<strong><code>List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(this.getSpringFactoriesLoaderFactoryClass(), this.getBeanClassLoader());</code></strong>进入，它会从类路径下得到一个资源: 然后扫描类路径下这两个配置文件</p>
+<p><strong>“META-INF/spring.factories” “META-INF/spring.factories”</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//从类路径得到两个配置文件  之后扫描其中的内容</span></span><br><span class="line">Enumeration&lt;URL&gt; urls = classLoader != <span class="keyword">null</span> ? classLoader.getResources(<span class="string">"META-INF/spring.factories"</span>) : ClassLoader.getSystemResources(<span class="string">"META-INF/spring.factories"</span>);</span><br><span class="line"></span><br><span class="line">LinkedMultiValueMap result = <span class="keyword">new</span> LinkedMultiValueMap();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">while</span>(urls.hasMoreElements()) &#123;</span><br><span class="line">                    URL url = (URL)urls.nextElement();</span><br><span class="line">                    UrlResource resource = <span class="keyword">new</span> UrlResource(url);</span><br><span class="line">                  <span class="comment">//把扫描到的内容封装到Properties对象</span></span><br><span class="line">                    Properties properties = PropertiesLoaderUtils.loadProperties(resource);</span><br><span class="line">                    Iterator var6 = properties.entrySet().iterator();</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">while</span>(var6.hasNext()) &#123;</span><br><span class="line">                        Entry&lt;?, ?&gt; entry = (Entry)var6.next();</span><br><span class="line">                        String factoryClassName = ((String)entry.getKey()).trim();</span><br><span class="line">                        String[] var9 = StringUtils.commaDelimitedListToStringArray((String)entry.getValue());</span><br><span class="line">                        <span class="keyword">int</span> var10 = var9.length;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">for</span>(<span class="keyword">int</span> var11 = <span class="number">0</span>; var11 &lt; var10; ++var11) &#123;</span><br><span class="line">                            String factoryName = var9[var11];</span><br><span class="line">                            result.add(factoryClassName, factoryName.trim());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"><span class="keyword">return</span> result;</span><br></pre></td></tr></table></figure>
+<p>最后把这个配置文件中扫描到的内容封装到一个<strong><code>Properties</code></strong>对象中</p>
+<p>配置文件中所有的<strong>EnableAutoConfiguration</strong>值被加入到容器中，这些以<strong>AutoConfiguration</strong>结尾的就是要加入到容器的组件，从而实现自动配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># Auto Configure</span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.cloud.CloudServiceConnectorsAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.context.ConfigurationPropertiesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.dao.PersistenceExceptionTranslationAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.cassandra.CassandraReactiveDataAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.cassandra.CassandraReactiveRepositoriesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.couchbase.CouchbaseDataAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.couchbase.CouchbaseReactiveDataAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.couchbase.CouchbaseReactiveRepositoriesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.couchbase.CouchbaseRepositoriesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.jdbc.JdbcRepositoriesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.ldap.LdapRepositoriesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.mongo.MongoReactiveDataAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.mongo.MongoReactiveRepositoriesAuto</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>每一个自动配置类进行自动配置功能</p>
+<ul>
+<li><p>以<strong>HttpEncodingAutoConfiguration</strong>解释自动配置原理</p>
+<p>在<strong>@EnableConfigurationProperties({HttpProperties.class})</strong>注解中进入<strong>HttpProperties</strong>类中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//表示这是一个配置类</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="comment">//启动指定类的ConfigurationProperties功能</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(&#123;HttpProperties.class&#125;)</span><br><span class="line"><span class="comment">/*@Conditional是Spring底层注解，它的作用是根据不同的条件，如果指定的条件满足则整个配置类里的配置就会生效*/</span></span><br><span class="line"><span class="comment">//这个Conditional注解的作用就是判断这个类是不是Web类</span></span><br><span class="line"><span class="meta">@ConditionalOnWebApplication</span>(</span><br><span class="line">    type = Type.SERVLET</span><br><span class="line">)</span><br><span class="line"><span class="comment">//判断当前项目有没有这个类  Filter是SpringMvc解决乱码的过滤器</span></span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(&#123;CharacterEncodingFilter.class&#125;)</span><br><span class="line"><span class="comment">//判断配置文件中是否存在某个配置 spring.http.encoding.enabled</span></span><br><span class="line"><span class="comment">//matchIfMissing = true 表示不配置也可以 默认是true</span></span><br><span class="line"><span class="meta">@ConditionalOnProperty</span>(</span><br><span class="line">    prefix = <span class="string">"spring.http.encoding"</span>,</span><br><span class="line">    value = &#123;<span class="string">"enabled"</span>&#125;,</span><br><span class="line">    matchIfMissing = <span class="keyword">true</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpEncodingAutoConfiguration</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Encoding properties;</span><br><span class="line">  <span class="comment">//只有一个有参构造器，那么参数的值就会从ioc容器中获取  而这行代码实际上就是		 @EnableConfigurationProperties(&#123;HttpProperties.class&#125;)生效后产生</span></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">HttpEncodingAutoConfiguration</span><span class="params">(HttpProperties properties)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.properties = properties.getEncoding();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//给容器添加一个组件  这个组件的一些值就是从HttpProperties类中获取的  就是最上边那个注解</span></span><br><span class="line">  <span class="comment">//@EnableConfigurationProperties(&#123;HttpProperties.class&#125;)</span></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="meta">@ConditionalOnMissingBean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> CharacterEncodingFilter <span class="title">characterEncodingFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        CharacterEncodingFilter filter = <span class="keyword">new</span> OrderedCharacterEncodingFilter();</span><br><span class="line">        filter.setEncoding(<span class="keyword">this</span>.properties.getCharset().name());</span><br><span class="line">        		  filter.setForceRequestEncoding(<span class="keyword">this</span>.properties.shouldForce(org.springframework.boot.autoconfigure.http.HttpProperties.Encoding.Type.REQUEST));</span><br><span class="line">        filter.setForceResponseEncoding(<span class="keyword">this</span>.properties.shouldForce(org.springframework.boot.autoconfigure.http.HttpProperties.Encoding.Type.RESPONSE));</span><br><span class="line">        <span class="keyword">return</span> filter;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>综上所述以<strong>*AutoConfiguration</strong>结尾的这种类就是判断根据不同的条件判断配置类是否生效，如果生效:</p>
+<p>那么这个配置类就会给容器中添加组件。所添加组件的属性就是从<strong>properties</strong>配置文件中获取的  <strong>参考下一步</strong></p>
+</li>
+<li><p>进入<strong>HttpProperties</strong>类中，从<strong>ConfigurationProperties</strong>注解可以看出，这个类从配置文件中获取指定的值和<strong>bean</strong>属性进行绑定</p>
+<p>所以所有能在配置文件中进行配置的属性都是在以<strong>*Properties</strong>的类中封装着</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将配置文件对应的值和HttpProperties绑定起来</span></span><br><span class="line"><span class="meta">@ConfigurationProperties</span>(</span><br><span class="line">    prefix = <span class="string">"spring.http"</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpProperties</span> </span>&#123;</span><br><span class="line">  <span class="comment">/*其中的一些属性*/</span></span><br><span class="line">  			<span class="keyword">private</span> Charset charset;</span><br><span class="line">        <span class="keyword">private</span> Boolean force;</span><br><span class="line">        <span class="keyword">private</span> Boolean forceRequest;</span><br><span class="line">        <span class="keyword">private</span> Boolean forceResponse;</span><br><span class="line">        <span class="keyword">private</span> Map&lt;Locale, Charset&gt; mapping;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>总结:</strong></p>
+<ul>
+<li><p><strong>从启动类SpringBootApplication</strong>注解<strong>@EnableAutoConfiguration</strong>进入</p>
+</li>
+<li><p><strong>EnableAutoConfiguration</strong>类中的<strong>@Import注解导入AutoConfigurationImportSelector</strong>类</p>
+</li>
+<li><p><strong>AutoConfigurationImportSelector</strong>中的<strong>selectImports</strong>方法调用 <strong>getAutoConfigurationEntry(AutoConfigurationMetadata autoConfigurationMetadata, AnnotationMetadata annotationMetadata)</strong>方法，</p>
+</li>
+<li><p>这个方法里的</p>
+<p><strong>List<string> configurations = this.getCandidateConfigurations(annotationMetadata, attributes)</string></strong>这行代码里的方法又去调用<strong>SpringFactoriesLoader.loadFactoryNames(this.getSpringFactoriesLoaderFactoryClass(), this.getBeanClassLoader())</strong>方法</p>
+</li>
+<li><p>最终<strong>loadSpringFactories()</strong>方法将扫描类路径下的<strong>META-INF/spring.factories</strong>系统自动配置文件</p>
+</li>
+<li><p>配置文件中的所有以<strong>*AutoConfiguration</strong>结尾的类都会被加载容器中</p>
+</li>
+<li><p>每个以<strong>*AutoConfiguration</strong>结尾的类都会进行自动配置功能，在这种类的上面都会有<strong>@EnableConfigurationProperties({xxxxxProperties.class})</strong>注解，去加载以<strong>Properties</strong>结尾的配置类</p>
+</li>
+<li><p>以<strong>Properties</strong>结尾的配置类就会去根据**@ConfigurationProperties(</p>
+<pre><code>prefix = &quot;spring.http&quot;)**注解去绑定配置文件中我们给出的属性值 
+</code></pre></li>
+</ul>
+<p>至此，自动配置完成。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/01/process-scheduling/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2214,210 +2414,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/Dubbo入门/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="liupf">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="liupf's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/19/Dubbo入门/" itemprop="url">Dubbo入门</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-19T10:15:28+08:00">
-                2019-04-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Dubbo配置-dubbo-properties与属性加载顺序"><a href="#Dubbo配置-dubbo-properties与属性加载顺序" class="headerlink" title="Dubbo配置:dubbo.properties与属性加载顺序"></a>Dubbo配置:dubbo.properties与属性加载顺序</h3><h4 id="优先级-递减"><a href="#优先级-递减" class="headerlink" title="优先级(递减)"></a>优先级(递减)</h4><ol>
-<li><p>Java</p>
-<ul>
-<li>虚拟节参数设置: -Ddubbo.protocol.port = 20880</li>
-</ul>
-</li>
-</ol>
-<ol start="2">
-<li><p>XML</p>
-<ul>
-<li><p>通过Spring或者SpringBoot加载xml文件</p>
-<dubbo :protrocal port="30880">
-</dubbo></li>
-</ul>
-</li>
-<li><p>Properties</p>
-<ul>
-<li><p>全局的配置 dubbo.properties</p>
-<p>dubbo.protrocal.port = 20880</p>
-</li>
-</ul>
-</li>
-</ol>
-<h4 id="常用配置"><a href="#常用配置" class="headerlink" title="常用配置"></a>常用配置</h4><ul>
-<li><p><strong>check=””</strong> 启动时是否检查 默认开启  </p>
-<p>例如 若服务提供者未启动 而服务消费者先启动了服务 若<strong>check=“true”</strong> 则报错阻止Spring启动 否则不报错</p>
-</li>
-<li><p><strong>timeout=””</strong> 超时属性 单位毫秒</p>
-<p>超过多长时间就不等待了 防止大量线程阻塞(还可以指定方法超时)</p>
-<ul>
-<li>方法级优先 接口级次之 全局配置再次之</li>
-<li>如果级别一样则消费方优先于提供方</li>
-</ul>
-</li>
-<li><p><strong>retries=””</strong> 调用失败后重试次数</p>
-</li>
-<li><p><strong>version=””</strong> 声明版本号 进行灰度发布</p>
-</li>
-</ul>
-<h3 id="Dubbo的负载均衡机制"><a href="#Dubbo的负载均衡机制" class="headerlink" title="Dubbo的负载均衡机制"></a>Dubbo的负载均衡机制</h3><ol>
-<li><p><strong>Random LoadBalance</strong>(基于权重的<strong><em>随机</em></strong>负载均衡机制)</p>
-<p>大量请求的情况下，请求基本上按照服务器配置的权重分散。</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%885.50.26.png" alt></p>
-</li>
-<li><p><strong>RoundRobin LoadBalance</strong>(基于权重的<strong><em>轮询</em></strong>负载均衡机制)</p>
-<p>常规的<strong>轮询</strong>负载均衡机制就是挨个遍历</p>
-<p>而基于<strong>权重</strong>的轮询，当请求过来之后会先看当前服务器轮询的次数是否已经达到了它在整个服务器集群所占的权重，如果达到了，就去请求别的服务器。</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%885.55.44.png" alt></p>
-</li>
-<li><p><strong>LeastActive LoadBalance</strong>(最少活跃数-负载均衡机制)</p>
-<p>根据上次的调用时间找到最快响应的服务器</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%887.48.27.png" alt></p>
-</li>
-<li><p><strong>ConsistentHash LoadBalance</strong>(一致性哈希)</p>
-<p>根据<strong>key</strong>的hash值找到对应的服务区</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/dubbo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8B%E5%8D%887.52.37.png" alt></p>
-</li>
-</ol>
-<h3 id="Dubbo集群容错模式"><a href="#Dubbo集群容错模式" class="headerlink" title="Dubbo集群容错模式"></a>Dubbo集群容错模式</h3><p>当请求调用远程服务时，如果远程服务出错，dubbo会通过容错方案来解决。</p>
-<p><strong>集群容错模式:</strong></p>
-<ol>
-<li><p><strong>Failover Cluster</strong></p>
-<p>失败自动切换，当出现失败尝试重启其他服务器。通常用于读操作，但重试会带来更长的延迟。可以通过<strong><em>retries</em></strong> = “num” 来设置重试的次数。</p>
-<ol start="2">
-<li><strong>Failfast Cluster</strong></li>
-</ol>
-<p>快速失败，只发起一次调用，失败立即报错。通常用于非幂等性的写操作，如新增记录。</p>
-</li>
-</ol>
-<ol start="3">
-<li><p><strong>Failsafe Cluster</strong></p>
-<p>出现异常时直接忽略。通常用于写入审计日志等操作。</p>
-</li>
-<li><p><strong> FailBack Cluster</strong></p>
-<p>失败自动恢复，后台记录失败请求，定时重发。通常用于消息通知等操作。</p>
-</li>
-<li><p><strong>Forking Cluster</strong></p>
-<p>并行调用多个服务器，只要有一个成功就返回。缺点是会浪费服务器资源，可以通过 <strong>froks</strong> = “num”来设置最大的并行数。</p>
-</li>
-<li><p><strong>Broadcast Cluster</strong></p>
-<p>广播调用所有的服务提供者，只要有任意一台报错则报错。通常用于所有的服务提供者更新缓存或日志等本地资源消息。</p>
-</li>
-</ol>
-<p><strong>集群配置模式:</strong></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">cluster</span>=<span class="string">"failsafe"</span>/&gt;</span></span><br><span class="line">或者</span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">cluster</span>=<span class="string">"failsafe"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2468,7 +2464,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2479,7 +2475,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2490,7 +2486,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
