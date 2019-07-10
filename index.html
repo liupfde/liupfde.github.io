@@ -249,6 +249,132 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/10/Spring-Security简述/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="liupf">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="liupf's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/10/Spring-Security简述/" itemprop="url">Spring Security简述</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T14:45:33+08:00">
+                2019-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><hr>
+<p><strong>Spring Security</strong>是Spring提供的权限管理框架。<u>一般，资源的分配是基于角色(资源访问权限赋给角色，用户通过角色进而拥有权限);而访问资源的时候是基于资源权限去进行授权判断。</u></p>
+<p>包括Security在内，大部分安全框架都可以简单理解为两个核心: 一个<strong>认证</strong>，即判断该用户是否存在，密码是否正确；另一个就是<strong>鉴权</strong>，即看看当前访问的资源有没有权限，这个用户能做什么、不能做什么。</p>
+<h3 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h3><hr>
+<p>Security的认证主要是通过以下接口实现的: <strong>UserDetails、UserDetailsService、AuthenticationProvider。</strong><u><em>UserDetails是用来封装用户的账号信息、权限等信息，从数据库中取出的信息首先要封装成UserDetails才能在Spring Security框架中使用</em></u>；UserDetails的作用就是处理UserDetails，他提供查询账号信息并封装成UserDetails的服务；AuthenticationProvider的主要工作就是负责认证，从登陆请求那里拿到账号密码等，然后再跟从数据库那里得到的UserDetails进行比对，若不正确则返回信息，若正确则把这些信息整合交给Security框架，供以后使用。</p>
+<h3 id="鉴权"><a href="#鉴权" class="headerlink" title="鉴权"></a>鉴权</h3><hr>
+<p>Security的鉴权方式有多种，这里记录通过自定义过滤器的鉴权方式。主要与以下接口相关:<strong>AbstractSecurityInterceptor(Filter)、FilterInvocationSecurityMetadataSource、AccessDecisionManager</strong>。FilterInvocationSecurityMetadataSource是权限资源管理器，他的主要工作就是根据请求的资源路径从数据库中取出相应的权限信息；AccessDecisionManager类似于权限资源管理判断器，负责认证当前用户的权限是否可以访问；AbstractSecurityInterceptor就是前边两个类比较的地方。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/12/存储管理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2498,228 +2624,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/21/SQL优化总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="liupf">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="liupf's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/21/SQL优化总结/" itemprop="url">SQL优化总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-21T13:53:35+08:00">
-                2019-04-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="EXPLAIN执行计划分析SQL"><a href="#EXPLAIN执行计划分析SQL" class="headerlink" title="EXPLAIN执行计划分析SQL"></a>EXPLAIN执行计划分析SQL</h3><h4 id="一、EXPLAIN信息详解"><a href="#一、EXPLAIN信息详解" class="headerlink" title="一、EXPLAIN信息详解"></a>一、EXPLAIN信息详解</h4><p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/database/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-26%20%E4%B8%8A%E5%8D%8811.25.58.png" alt></p>
-<h5 id="字段解释"><a href="#字段解释" class="headerlink" title="字段解释"></a>字段解释</h5><ul>
-<li><p><strong>id</strong></p>
-<p>表示执行查找或操作表的顺序。在执行操作的时候会出现以下三种情况</p>
-<ol>
-<li><p>id值相同 执行的顺序为由上至下</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/database/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-26%20%E4%B8%8B%E5%8D%882.39.25.png" alt></p>
-</li>
-<li><p>id值不同，则id值越大的越先被执行</p>
-</li>
-<li><p>id值有的相同有的不同，这种情况下id值相同的从上向下进行，id不同的id值越大优先级越高</p>
-</li>
-</ol>
-</li>
-<li><p><strong>select_type</strong></p>
-<p>查询的类型，用于区分普通查询、联合查询、子查询等复杂查询。包括一下类型:</p>
-<ul>
-<li><strong>SIMPLE:</strong> 简单的select查询，查询中不包含子查询或者union</li>
-<li><strong>PRIMARY:</strong> 查询中包含很多复杂的子部分，最外层的查询就被标记为primary</li>
-<li><strong>SUBQUERY:</strong> 在select或where列表中包含了子查询</li>
-<li><strong>DERIVED:</strong> 在<strong><em>FROM</em></strong>列表中包含的子查询被标记为derived</li>
-<li><strong>UNION:</strong> 如果第二个select出现在union之后，则被标记为union；如果union包含在from子句的子查询中，则外层select被标记为derived</li>
-<li><strong>UNION RESULT:</strong> 从union表获取结果的select</li>
-</ul>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/database/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-26%20%E4%B8%8B%E5%8D%889.22.59.png" alt></p>
-</li>
-<li><p><strong>type</strong></p>
-<p>访问类型。SQL查询优化的重要指标，结果从好到坏依次是：</p>
-<p><strong>system</strong> &gt; <strong>const</strong> &gt; <strong>eq_ref</strong> &gt; <strong>ref</strong> &gt; fulltext &gt; ref_or_null &gt; index_merge &gt; unique_subquery &gt; index_subquery &gt; <strong>range</strong> &gt; <strong>index</strong> &gt; <strong>ALL</strong></p>
-<p><strong>一般来说，好的sql查询至少达到range级别，最好能达到ref</strong></p>
-<ul>
-<li><p><strong>system</strong></p>
-<p>表只有一行记录(等于系统表)，是<strong>const</strong>类型的特例，一般不会出现</p>
-</li>
-<li><p><strong>const</strong></p>
-<p>表示通过索引一次就找到了，const用于比较<strong>primary key</strong>或者<strong>unique</strong>索引。因为只需要匹配一行数据所以很快。如果将主键置于where列表中，mysql就能将该查询转换成一个const</p>
-</li>
-<li><p><strong>eq_ref</strong></p>
-<p>唯一性索引扫描，<strong>对于每个索引键，表中只有一条记录与之匹配。</strong>常见于主键索引或者唯一索引。</p>
-</li>
-<li><p><strong>ref</strong></p>
-<p>非唯一性索引扫描，返回匹配某个单独值的所有行。</p>
-</li>
-<li><p><strong>range</strong></p>
-<p>只检索给定范围的行，使用一个索引来选择行。key列显示使用了哪个索引。一般就是在where语句中出现了<strong>between、&lt;、&gt;、in</strong>的查询。比全表扫面好。</p>
-</li>
-<li><p><strong>index</strong></p>
-<p>表示遍历扫描索引树，读全表，但是是从索引中读取所以比<strong>ALL</strong>快。</p>
-</li>
-<li><p><strong>ALL</strong></p>
-<p>遍历全表。读硬盘。慢。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>possible_keys</strong></p>
-<p>列出查询涉及到的字段上存在的索引，但是<strong>该索引不一定在实际的查询中被使用</strong>。</p>
-</li>
-<li><p><strong>key</strong></p>
-<p><strong>实际</strong>使用的索引，如果为NULL，则表示没有使用索引。</p>
-</li>
-<li><p><strong>key_len</strong></p>
-<p>表示索引的最大的可能字节数，<strong>并不是实际使用索引的字节数</strong>。长度越短越好。</p>
-</li>
-<li><p><strong>ref</strong></p>
-<p>显示索引的哪一列被使用了，可能是一个常量const。</p>
-</li>
-<li><p><strong>rows</strong></p>
-<p>根据表统计信息及索引的选用情况，大致估算出找到所需记录需要读取的行数。</p>
-</li>
-<li><p>Extra</p>
-<p>不在其他字段中显示，但是比较重要的额外信息</p>
-</li>
-</ul>
-<h3 id="Mysql分页查询优化"><a href="#Mysql分页查询优化" class="headerlink" title="Mysql分页查询优化"></a>Mysql分页查询优化</h3><ul>
-<li><p><strong>常规操作</strong></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">LIMIT</span> <span class="keyword">start</span>, <span class="keyword">num</span>;</span><br></pre></td></tr></table></figure>
-<p>这种情况是用不到索引的，所以在查询大量数据的时候速度极慢。</p>
-<p><img src="https://blog-1257300108.cos.ap-beijing.myqcloud.com/database/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-28%20%E4%B8%8A%E5%8D%8810.23.36.png" alt></p>
-</li>
-<li><p><strong>常用分页方式</strong></p>
-<p>对于数据量不是特别大的表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM table WHERE ... ORDER BY ...(索引) LIMIT start, num;</span><br></pre></td></tr></table></figure>
-<p>这种情况会用到ORDER BY的索引</p>
-</li>
-<li><p><strong>子查询分页方式</strong></p>
-<p>数据量特别庞大，如果 LIMTIT的起始页数很大 如<strong>LIMIT 100000, 10</strong> 这时定位到100000就很慢。这时可以用子查询的方式来解决。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM table WHERE id &gt; (SELECT id FROM table WHERE user_id = ... ORDER BY id LIMIT 100000, 1) LIMIT 10;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>JOIN分页</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM table1 as t1 JOIN (SELECT id FROM table1 ORDER BY id LIMIT 100000, 1) as t2 WHERE t1.id &lt;= t2.id ORDER BY t1.id LIMIT 10;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>###问题 : MySQL多表联查效率高还是多次单表查询效率高?</p>
-<p>在业务中碰到一个情景，需要结合两张不同的表中查出数据。例如首先要从A表中判断要查的数据id有没有，如果存在则再从B表中查处具体的数据。这时就可以采用问题中所描述的两种方案。</p>
-<p><strong>回答:</strong></p>
-<p>​    使用多次单表查询。原因如下: </p>
-<ol>
-<li><p>不利于写操作。有的操作执行读数据时，会锁住被读的数据，阻塞其他业务对该部分的更新操作。如果采用JOIN涉及多个聚合函数，则相当于同时锁住了多张表，不能进行读写，影响了系统的整体性能。</p>
-<p>(注:有可能会碰到第一步查询时数据量过大的情况，这时或许可以对第一步进行分页查询，然后第二步中从第一步的结果中再去查。)</p>
-</li>
-<li><p>不利于维护。如果业务发生变动，某一张表的字段改了，那么该SQL语句也会失效。即耦合度太高。</p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2770,7 +2674,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
